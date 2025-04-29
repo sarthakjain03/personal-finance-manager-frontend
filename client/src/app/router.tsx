@@ -10,6 +10,8 @@ import { User } from "@/types/user";
 
 const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
 
+const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
+
 const createAppRouter = ({ user }: { user: User | null }) => {
   return createBrowserRouter([
     {
@@ -18,12 +20,19 @@ const createAppRouter = ({ user }: { user: User | null }) => {
     },
     {
       path: paths.home.path,
-      element: user ? (
-        <></>
-      ) : (
-        <Navigate to={paths.login.getHref(paths.home.path)} replace />
-      ),
+      Component: LandingPageView,
       children: [
+        {
+          path: paths.home.dashboard.path,
+          element: user ? (
+            <></>
+          ) : (
+            <Navigate
+              to={paths.login.getHref(paths.home.dashboard.path)}
+              replace
+            />
+          ),
+        },
         {
           path: "*",
           Component: PageNotFoundView,

@@ -4,7 +4,9 @@ import AppRouter from './router';
 const App = () => {
   return (
     <AppProvider>
-      <AppRouter />
+      <div className='mx-6 md:mx-12 bg-[#FFFAF4}'>
+        <AppRouter />
+      </div>
     </AppProvider>
   );
 };
