@@ -1,13 +1,13 @@
-import AppProvider from './provider';
-import AppRouter from './router';
+import AppProvider from "./provider";
+import AppRouter from "./router";
 
 const App = () => {
   return (
-    <AppProvider>
-      <div className='mx-6 md:mx-12 bg-[#FFFAF4}'>
+    <div className="py-4 px-6 md:px-12 bg-[#FFFDF6]">
+      <AppProvider>
         <AppRouter />
-      </div>
-    </AppProvider>
+      </AppProvider>
+    </div>
   );
 };
 

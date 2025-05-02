@@ -13,10 +13,10 @@ const Navbar = () => {
   const { isAuthenticated, user } = useUserStore();
 
   return (
-    <header className="my-4 flex justify-between items-center py-4 px-8 bg-white shadow-md rounded-md">
+    <header className="flex justify-between items-center py-4 px-8 bg-white shadow-md rounded-md">
       <h1 className="text-xl font-semibold">FinSphere</h1>
       {!isAuthenticated ? (
-        <Button className="cursor-pointer">Sign In</Button>
+        <Button className="cursor-pointer" onClick={() => {}}>Sign In</Button>
       ) : (
         <>
           <DropdownMenu>
