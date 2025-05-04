@@ -15,10 +15,6 @@ const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
 const createAppRouter = ({ user }: { user: User | null }) => {
   return createBrowserRouter([
     {
-      path: paths.login.path,
-      element: user ? <Navigate to={paths.home.path} /> : <></>,
-    },
-    {
       path: paths.home.path,
       Component: LandingPageView,
       children: [
@@ -28,7 +24,7 @@ const createAppRouter = ({ user }: { user: User | null }) => {
             <></>
           ) : (
             <Navigate
-              to={paths.login.getHref(paths.home.dashboard.path)}
+              to={paths.home.getHref(paths.home.dashboard.path)}
               replace
             />
           ),

@@ -1,16 +1,12 @@
 const paths = {
   home: {
     path: "/",
-    getHref: () => "/",
+    getHref: (redirectTo?: string) =>
+      `${redirectTo ? `?redirectTo=${redirectTo}` : ""}`,
     dashboard: {
       path: "/dashboard",
       getHref: () => "/dashboard",
     },
-  },
-  login: {
-    path: "/login",
-    getHref: (redirectTo?: string) =>
-      `/login${redirectTo ? `?redirectTo=${redirectTo}` : ""}`,
   },
 } as const;
 

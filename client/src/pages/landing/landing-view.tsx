@@ -131,7 +131,7 @@ const LandingPage = () => {
               animate="animate"
               variants={staggerChildren}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 lg-grid-cols-3 gap-8 mt-8"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
             >
               {features?.map((feature, index) => (
                 <motion.div
@@ -175,7 +175,7 @@ const LandingPage = () => {
               animate="animate"
               variants={staggerChildren}
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 lg-grid-cols-3 gap-8 mt-8"
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8"
             >
               {steps?.map((feature, index) => (
                 <motion.div
