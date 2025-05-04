@@ -9,16 +9,16 @@ const useUserStore = create<UserStore>()(
     immer((set) => ({
       user: null,
       setUser: (user: User | null) => set({ user }),
-      isAuthenticated: false,
-      setIsAuthenticated: (isAuthenticated: boolean) => {
-        set((state) => {
-          state.isAuthenticated = isAuthenticated;
-        });
-      },
       isUserAuthenticating: false,
       setIsUserAuthenticating: (isUserAuthenticating: boolean) => {
         set((state) => {
           state.isUserAuthenticating = isUserAuthenticating;
+        });
+      },
+      openSignInModal: false,
+      setOpenSignInModal: (openSignInModal: boolean) => {
+        set((state) => {
+          state.openSignInModal = openSignInModal;
         });
       },
     })),

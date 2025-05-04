@@ -12,7 +12,7 @@ import useUserStore from "@/store/user-store";
 import useResponsive from "@/hooks/use-responsive";
 
 const Navbar = () => {
-  const { isAuthenticated, user } = useUserStore();
+  const { user, setOpenSignInModal } = useUserStore();
   const { isMobile } = useResponsive();
 
   return (
@@ -23,8 +23,8 @@ const Navbar = () => {
           FinSphere
         </p>
       </div>
-      {!isAuthenticated ? (
-        <Button className="cursor-pointer bg-main hover:bg-sidemain" size={isMobile ? "default" : "lg"} onClick={() => {}}>Sign In</Button>
+      {!user ? (
+        <Button className="cursor-pointer bg-main hover:bg-sidemain" size={isMobile ? "default" : "lg"} onClick={() => setOpenSignInModal(true)}>Sign In</Button>
       ) : (
         <>
           <DropdownMenu>
