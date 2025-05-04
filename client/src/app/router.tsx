@@ -29,11 +29,11 @@ const createAppRouter = ({ user }: { user: User | null }) => {
             />
           ),
         },
-        {
-          path: "*",
-          Component: PageNotFoundView,
-        },
       ],
+    },
+    {
+      path: "*",
+      Component: PageNotFoundView,
     },
   ]);
 };
