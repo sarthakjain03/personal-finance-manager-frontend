@@ -1,17 +1,17 @@
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import googleSignIn from "@/api/auth/google-signin";
 import useUserStore from "@/store/user-store";
 
 const SignInDialog = () => {
   const { openSignInModal, setOpenSignInModal } = useUserStore();
+
+  // TODO: make this dialog responsive
+
+  const handleSignInWithGoogle = () => {
+    googleSignIn();
+    setOpenSignInModal(false);
+  }
 
   return (
     <Dialog
@@ -35,6 +35,7 @@ const SignInDialog = () => {
               size={"lg"}
               className="bg-bgMain p-6 cursor-pointer"
               variant={"outline"}
+              onClick={handleSignInWithGoogle}
             >
               <img
                 src="/google-logo.svg"

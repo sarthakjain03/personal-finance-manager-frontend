@@ -1,7 +1,8 @@
 export interface User {
-    id: string;
+    // id: string;
     name: string;
     email: string;
     accessToken: string;
-    refreshToken: string;
+    // refreshToken: string;
+    tokenExpiry: number;
 }

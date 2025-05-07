@@ -1,9 +1,11 @@
+import { useEffect } from "react";
 import { motion } from "motion/react";
 import Navbar from "@/app/layout/navbar";
 import Footer from "@/app/layout/footer";
 import { Button } from "@/components/ui/button";
 import useResponsive from "@/hooks/use-responsive";
 import { Wallet, Sparkles, Target } from "lucide-react";
+import useGoogleAuth from "@/hooks/use-google-auth";
 
 const features = [
   {
@@ -44,6 +46,7 @@ const steps = [
 
 const LandingPage = () => {
   const { isMobile } = useResponsive();
+  const { handleGoogleCallback }  = useGoogleAuth();
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -58,6 +61,10 @@ const LandingPage = () => {
       },
     },
   };
+
+  useEffect(() => {
+    handleGoogleCallback();
+  }, [])
 
   return (
     <main className="flex flex-col gap-4">

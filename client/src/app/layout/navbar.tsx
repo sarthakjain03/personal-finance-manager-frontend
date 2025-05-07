@@ -10,10 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Receipt } from "lucide-react";
 import useUserStore from "@/store/user-store";
 import useResponsive from "@/hooks/use-responsive";
+import useGoogleAuth from "@/hooks/use-google-auth";
 
 const Navbar = () => {
   const { user, setOpenSignInModal } = useUserStore();
   const { isMobile } = useResponsive();
+  const { loading, handleGoogleSignOut } = useGoogleAuth();
 
   return (
     <header className="flex justify-between items-center py-5 md:py-8 px-8 md:px-12 fixed w-full z-10 bg-bgMain">
@@ -28,11 +30,13 @@ const Navbar = () => {
       ) : (
         <>
           <DropdownMenu>
-            <DropdownMenuTrigger>{user?.name || "User"}</DropdownMenuTrigger>
+            <DropdownMenuTrigger disabled={loading}>{user?.name || "User"}</DropdownMenuTrigger>
             <DropdownMenuContent>
+              <DropdownMenuLabel>Dashboard</DropdownMenuLabel>
+              <DropdownMenuSeparator />
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleGoogleSignOut}>Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </>
