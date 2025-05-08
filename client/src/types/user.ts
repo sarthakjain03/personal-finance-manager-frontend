@@ -5,4 +5,5 @@ export interface User {
     accessToken: string;
     // refreshToken: string;
     tokenExpiry: number;
+    profilePhotoUrl?: string;
 }

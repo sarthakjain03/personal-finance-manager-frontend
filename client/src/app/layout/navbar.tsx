@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Receipt } from "lucide-react";
+import { Loader2, Receipt } from "lucide-react";
 import useUserStore from "@/store/user-store";
 import useResponsive from "@/hooks/use-responsive";
 import useGoogleAuth from "@/hooks/use-google-auth";
@@ -27,14 +27,23 @@ const Navbar = () => {
       </div>
       {!user ? (
         <Button className="cursor-pointer bg-main hover:bg-sidemain" size={isMobile ? "default" : "lg"} onClick={() => setOpenSignInModal(true)}>Sign In</Button>
+      ) : loading ? (
+        <Button disabled className="bg-main" size={isMobile ? "default" : "lg"}>
+          <Loader2 className="animate-spin" />
+        </Button>
       ) : (
         <>
+        {/* // TODO: add avatar in button trigger name and uninstall dropdown and use popover */}
           <DropdownMenu>
-            <DropdownMenuTrigger disabled={loading}>{user?.name || "User"}</DropdownMenuTrigger>
+            <DropdownMenuTrigger>
+              <Button className="cursor-pointer bg-main hover:bg-sidemain" size={isMobile ? "default" : "lg"}>
+                {user?.name || "User"}
+              </Button>
+            </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuLabel>Dashboard</DropdownMenuLabel>
+              <DropdownMenuItem>Dashboard</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuItem>My Account</DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleGoogleSignOut}>Logout</DropdownMenuItem>
             </DropdownMenuContent>

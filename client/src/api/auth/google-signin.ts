@@ -10,6 +10,7 @@ const googleSignIn = () => {
     params.append("client_id", googleClientId);
     params.append("redirect_uri", googleRedirectUri);
     params.append("response_type", "token");
+    // TODO: change the response_type to "code" and handle accordingly
     params.append(
       "scope",
       [

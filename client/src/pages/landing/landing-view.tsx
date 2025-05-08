@@ -44,6 +44,8 @@ const steps = [
   },
 ];
 
+// TODO: redirect to dashboard is user is logged in and clicks on Start now or Get started
+
 const LandingPage = () => {
   const { isMobile } = useResponsive();
   const { handleGoogleCallback }  = useGoogleAuth();

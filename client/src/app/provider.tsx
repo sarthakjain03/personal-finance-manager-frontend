@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -13,6 +14,7 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     >
       <ErrorBoundary FallbackComponent={() => <div>Error</div>}>
         <TooltipProvider>{children}</TooltipProvider>
+        <Toaster />
       </ErrorBoundary>
     </Suspense>
   );

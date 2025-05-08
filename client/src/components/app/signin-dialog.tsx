@@ -6,8 +6,6 @@ import useUserStore from "@/store/user-store";
 const SignInDialog = () => {
   const { openSignInModal, setOpenSignInModal } = useUserStore();
 
-  // TODO: make this dialog responsive
-
   const handleSignInWithGoogle = () => {
     googleSignIn();
     setOpenSignInModal(false);
@@ -20,8 +18,8 @@ const SignInDialog = () => {
     >
       <DialogContent className="sm:max-w-[500px] lg:max-w-3/4 p-0 overflow-hidden">
         <div className="flex justify-between items-center">
-          <img src="/default-img.jpg" alt="default-img" className="" />
-          <div className="flex flex-col gap-8 justify-center mx-4">
+          <img src="/default-img.jpg" alt="default-img" className="w-5 lg:w-100 xl:w-full hidden lg:block" />
+          <div className="flex flex-col gap-8 justify-center py-16 lg:py-0 mx-10 lg:mx-4">
             <div className="flex flex-col gap-2">
               <h1 className="text-2xl font-semibold text-sidemain">
                 Sign In to FinSphere
