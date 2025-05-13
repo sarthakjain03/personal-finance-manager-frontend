@@ -45,6 +45,7 @@ const steps = [
 ];
 
 // TODO: redirect to dashboard is user is logged in and clicks on Start now or Get started
+// TODO: complete the Terms of Service and Privacy Policy pages
 
 const LandingPage = () => {
   const { isMobile } = useResponsive();
