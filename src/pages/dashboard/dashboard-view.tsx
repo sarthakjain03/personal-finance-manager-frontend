@@ -25,7 +25,9 @@ const DashboardView = () => {
   return (
     <main className="flex flex-col gap-4">
       <Navbar />
-      <div className="mt-16 md:mt-18"></div>
+      <div className="mt-24">
+        Dashboard View
+      </div>
       <Footer />
     </main>
   );

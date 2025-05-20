@@ -1,8 +1,8 @@
 import { Receipt } from "lucide-react";
 
-const Footer = () => {
+const Footer = ({ isLandingView = false }) => {
   return (
-    <footer className="flex flex-col gap-20 justify-between items-center pt-32 lg:pt-48 pb-5 md:pb-8 px-8 md:px-12 w-full bg-bgMain">
+    <footer className={`flex flex-col gap-20 justify-between items-center ${isLandingView ? "pt-32 lg:pt-48" : "pt-18"} pb-5 md:pb-8 px-8 md:px-12 w-full bg-bgMain`}>
       <div className="flex flex-wrap justify-between gap-6 md:gap-0 w-full">
         <div className="flex gap-2 items-center">
           <Receipt color="#2A8E9E" size={24} />

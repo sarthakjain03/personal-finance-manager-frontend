@@ -56,9 +56,8 @@ const useGoogleAuth = () => {
           accessToken,
           tokenExpiry: Date.now() + Number(expiresIn) * 1000,
         });
-        // navigate("/dashboard");
-        // return;
-        // TODO: redirect to dashboard or homepage after setting the user in userStore
+        navigate("/dashboard");
+        return;
       }
       setLoading(false)
     }

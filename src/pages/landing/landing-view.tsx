@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import useResponsive from "@/hooks/use-responsive";
 import { Wallet, Sparkles, Target } from "lucide-react";
 import useGoogleAuth from "@/hooks/use-google-auth";
+import useLanding from "@/pages/landing/use-landing";
 
 const features = [
   {
@@ -44,12 +45,12 @@ const steps = [
   },
 ];
 
-// TODO: redirect to dashboard is user is logged in and clicks on Start now or Get started
 // TODO: complete the Terms of Service and Privacy Policy pages
 
 const LandingPage = () => {
   const { isMobile } = useResponsive();
   const { handleGoogleCallback }  = useGoogleAuth();
+  const { handleSignIn } = useLanding();
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -71,7 +72,7 @@ const LandingPage = () => {
 
   return (
     <main className="flex flex-col gap-4">
-      <Navbar />
+      <Navbar isLandingView={true} />
       <div className="mt-16 md:mt-18">
         <section
           id="hero"
@@ -104,7 +105,7 @@ const LandingPage = () => {
               <Button
                 className="bg-main cursor-pointer hover:bg-sidemain"
                 size={isMobile ? "default" : "lg"}
-                onClick={() => {}}
+                onClick={handleSignIn}
               >
                 Get Started
               </Button>
@@ -258,7 +259,7 @@ const LandingPage = () => {
                 <Button
                   className="bg-main cursor-pointer hover:bg-bgMain hover:text-bgSecondary"
                   size={isMobile ? "default" : "lg"}
-                  onClick={() => {}}
+                  onClick={handleSignIn}
                 >
                   Start Now
                 </Button>
@@ -267,7 +268,7 @@ const LandingPage = () => {
           </div>
         </section>
       </div>
-      <Footer />
+      <Footer isLandingView={true} />
     </main>
   );
 };
