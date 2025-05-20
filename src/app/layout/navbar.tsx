@@ -54,7 +54,6 @@ const Navbar = ({ isLandingView = false }) => {
         </Button>
       ) : (
         <>
-          {/* // TODO: uninstall dropdown and use popover */}
           <Popover>
             <PopoverTrigger>
               <Avatar className="cursor-pointer size-10 text-md font-medium text-secondary">
