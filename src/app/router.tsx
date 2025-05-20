@@ -11,6 +11,7 @@ import { User } from "@/types/user";
 const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
 
 const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
+const DashboardPageView = lazy(() => import("@/pages/dashboard/dashboard-view"));
 
 const createAppRouter = ({ user }: { user: User | null }) => {
   return createBrowserRouter([
@@ -21,7 +22,7 @@ const createAppRouter = ({ user }: { user: User | null }) => {
         {
           path: paths.home.dashboard.path,
           element: user ? (
-            <></>
+            <DashboardPageView />
           ) : (
             <Navigate
               to={paths.home.getHref(paths.home.dashboard.path)}
