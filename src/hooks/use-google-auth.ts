@@ -57,6 +57,7 @@ const useGoogleAuth = () => {
           tokenExpiry: Date.now() + Number(expiresIn) * 1000,
         });
         navigate("/dashboard");
+        setLoading(false)
         return;
       }
       setLoading(false)
@@ -67,6 +68,7 @@ const useGoogleAuth = () => {
 
   const handleGoogleSignOut = async () => {
     setLoading(true);
+    sessionStorage.removeItem("hasRedirected");
     try {
       if (user?.accessToken) {
         await googleSignOut(user.accessToken);
