@@ -1,13 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import Navbar from "@/app/layout/navbar";
 import Footer from "@/app/layout/footer";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import useResponsive from "@/hooks/use-responsive";
+import Navigation from "./components/navigation";
+import CurrentBalanceCard from "./components/current-balance";
 
 const DashboardView = () => {
   const { isMobile } = useResponsive();
+  const [activeTab, setActiveTab] = useState("summary");
 
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
@@ -26,16 +28,9 @@ const DashboardView = () => {
   return (
     <main className="flex flex-col gap-4">
       <Navbar />
-      <div className="mt-24 px-8 md:px-12">
-        <div className="flex justify-center">
-          <Tabs defaultValue="expenses" className="w-full">
-            <TabsList className="w-full">
-              <TabsTrigger value="expenses" className="cursor-pointer">Expenses</TabsTrigger>
-              <TabsTrigger value="goals" className="cursor-pointer">Goals</TabsTrigger>
-              <TabsTrigger value="budgets" className="cursor-pointer">Budgets</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+      <div className="mt-24 px-8 md:px-12 flex flex-col gap-6">
+        <CurrentBalanceCard />
+        <Navigation activeTab={activeTab} onTabChange={(tabId) => setActiveTab(tabId)} />
         Dashboard View
       </div>
       <Footer />

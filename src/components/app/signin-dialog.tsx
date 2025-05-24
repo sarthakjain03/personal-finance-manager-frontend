@@ -3,6 +3,8 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import googleSignIn from "@/api/auth/google-signin";
 import useUserStore from "@/store/user-store";
 
+// TODO: CREATE A SEPARATE /login PAGE
+
 const SignInDialog = () => {
   const { openSignInModal, setOpenSignInModal } = useUserStore();
 
