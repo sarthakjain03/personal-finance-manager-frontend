@@ -76,11 +76,12 @@ const useGoogleAuth = () => {
       }
 
       navigate("/");
+      setLoading(false);
     } catch (error) {
+      setLoading(false);
       console.error(error);
       throw new Error("Error occurred while signing out from Google");
     }
-    setLoading(false);
   };
 
   return { loading, handleGoogleSignOut, handleGoogleCallback };
