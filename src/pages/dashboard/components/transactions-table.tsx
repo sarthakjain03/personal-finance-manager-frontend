@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
-import { Transaction } from "../types/transactions-table-types";
+import { Transaction } from "../types/transactions.types";
 
 const TransactionColumns: ColumnDef<Transaction>[] = [
   {

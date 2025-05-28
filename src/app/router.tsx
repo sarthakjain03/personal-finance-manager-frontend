@@ -12,7 +12,7 @@ const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
 
 const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
 const DashboardPageView = lazy(
-  () => import("@/pages/dashboard/dashboard-view")
+  () => import("@/pages/dashboard/views/dashboard-view")
 );
 
 const createAppRouter = ({ user }: { user: User | null }) => {
