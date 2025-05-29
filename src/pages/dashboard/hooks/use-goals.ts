@@ -4,7 +4,7 @@ import { Goal } from "../types/goals.types";
 const useGoals = () => {
   const [goals, setGoals] = useState<Goal[]>([
     {
-      id: 1,
+      id: "1",
       title: "Emergency Fund",
       description: "Build a 6-month emergency fund",
       current: 8200,
@@ -13,7 +13,7 @@ const useGoals = () => {
       deadline: "Dec 2025",
     },
     {
-      id: 2,
+      id: "2",
       title: "Vacation to Europe",
       description: "Save for a 2-week European vacation",
       current: 3500,
@@ -22,7 +22,7 @@ const useGoals = () => {
       deadline: "Jun 2025",
     },
     {
-      id: 3,
+      id: "3",
       title: "New Car",
       description: "Save for a reliable used car",
       current: 12000,
@@ -31,7 +31,7 @@ const useGoals = () => {
       deadline: "Aug 2025",
     },
     {
-      id: 4,
+      id: "4",
       title: "Home Down Payment",
       description: "Save for a house down payment",
       current: 25000,
@@ -63,27 +63,6 @@ const useGoals = () => {
     return "text-blue-600";
   };
 
-  const handleNewGoal = (newGoal: Omit<Goal, "id" | "current">) => {
-    const goal: Goal = {
-      ...newGoal,
-      id: Math.max(...goals.map((g) => g.id)) + 1,
-      current: 0,
-    };
-    setGoals([...goals, goal]);
-  };
-
-  const handleEditGoal = (goalId: number, updatedGoal: Partial<Goal>) => {
-    setGoals(
-      goals.map((goal) =>
-        goal.id === goalId ? { ...goal, ...updatedGoal } : goal
-      )
-    );
-  };
-
-  const handleDeleteGoal = (goalId: number) => {
-    setGoals(goals.filter((goal) => goal.id !== goalId));
-  };
-
   const openEditDialog = (goal: Goal) => {
     setSelectedGoal(goal);
     setGoalDialogOpen("edit");
@@ -103,9 +82,6 @@ const useGoals = () => {
     selectedGoal,
     openEditDialog,
     openDeleteDialog,
-    handleNewGoal,
-    handleEditGoal,
-    handleDeleteGoal,
     getCategoryColor,
     getProgressColor,
   };

@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import useResponsive from "@/hooks/use-responsive";
 import {
   Card,
@@ -15,16 +14,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Search, CalendarIcon, XCircle } from "lucide-react";
+import { Search, CalendarIcon, XCircle, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TransactionsTable from "../components/transactions-table";
 import useTransactions from "../hooks/use-transactions";
+import AddEditTransactionDialog from "../components/add-edit-transactions-dialog";
+import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 
 const TransactionsTabView = () => {
   const { isMobile } = useResponsive();
-  const { setSearch, search, setDateRange, dateRange, transactions } =
-    useTransactions();
+  const {
+    setSearch,
+    search,
+    setDateRange,
+    dateRange,
+    transactions,
+    setIsTransactionDialogOpen,
+    isTransactionDialogOpen,
+    setSelectedTransaction,
+    selectedTransaction,
+    tableColumns,
+    setDeleteTransactionOpen,
+    deleteTransactionOpen,
+  } = useTransactions();
 
   return (
     <div className="space-y-6">
@@ -33,9 +46,16 @@ const TransactionsTabView = () => {
         <div>
           <h2 className="text-2xl font-bold text-gray-900">Transactions</h2>
           <p className="text-gray-600">
-            View and filter all your account activity
+            View and manage your transaction history
           </p>
         </div>
+        <Button
+          onClick={() => setIsTransactionDialogOpen("new")}
+          className="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+        >
+          <Plus className="w-4 h-4" />
+          Add Transaction
+        </Button>
       </div>
       {/* Transactions Table */}
       <Card>
@@ -101,10 +121,32 @@ const TransactionsTabView = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <TransactionsTable data={transactions || []} />
+            <TransactionsTable data={transactions || []} columns={tableColumns || []} />
           </div>
         </CardContent>
       </Card>
+
+      {/* Add/Edit Transaction Dialog */}
+      {isTransactionDialogOpen !== "" && (
+        <AddEditTransactionDialog
+          open={isTransactionDialogOpen !== ""}
+          transaction={selectedTransaction}
+          onOpenChange={setIsTransactionDialogOpen}
+          onNewSave={() => {}}
+          onEditSave={() => {}}
+          action={isTransactionDialogOpen === "new" ? "New" : "Edit"}
+        />
+      )}
+
+      {deleteTransactionOpen && (
+        <DeleteConfirmDialog
+          open={deleteTransactionOpen}
+          onOpenChange={setDeleteTransactionOpen}
+          title={"Transaction"}
+          description={selectedTransaction?.description || ""}
+          onConfirm={() => {}}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 export interface Goal {
-  id: number;
+  id: string;
   title: string;
   description: string;
   current: number;
@@ -11,7 +11,7 @@ export interface Goal {
 export interface AddEditGoalDialogProps {
   open: boolean;
   onOpenChange: (open: string) => void;
-  onEditSave: (goalId: number, updatedGoal: Partial<Goal>) => void;
+  onEditSave: (goalId: string, updatedGoal: Partial<Goal>) => void;
   onNewSave: (goal: {
     title: string;
     description: string;

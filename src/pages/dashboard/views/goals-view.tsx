@@ -35,9 +35,6 @@ const GoalsView = () => {
     selectedGoal,
     openEditDialog,
     openDeleteDialog,
-    handleNewGoal,
-    handleEditGoal,
-    handleDeleteGoal,
     getCategoryColor,
     getProgressColor,
   } = useGoals();
@@ -149,22 +146,26 @@ const GoalsView = () => {
       </div>
 
       {/* Dialogs */}
-      <AddEditGoalDialog
-        open={goalDialogOpen !== ""}
-        onOpenChange={setGoalDialogOpen}
-        onEditSave={handleEditGoal}
-        onNewSave={handleNewGoal}
-        goal={goalDialogOpen === "edit" ? selectedGoal : null}
-        action={goalDialogOpen === "edit" ? "Edit" : "Create New"}
-      />
+      {goalDialogOpen !== "" && (
+        <AddEditGoalDialog
+          open={goalDialogOpen !== ""}
+          onOpenChange={setGoalDialogOpen}
+          onEditSave={() => {}}
+          onNewSave={() => {}}
+          goal={goalDialogOpen === "edit" ? selectedGoal : null}
+          action={goalDialogOpen === "edit" ? "Edit" : "Create New"}
+        />
+      )}
 
-      <DeleteConfirmDialog
-        open={deleteGoalOpen}
-        onOpenChange={setDeleteGoalOpen}
-        title="Goal"
-        description={selectedGoal?.title || ""}
-        onConfirm={() => selectedGoal && handleDeleteGoal(selectedGoal.id)}
-      />
+      {deleteGoalOpen && (
+        <DeleteConfirmDialog
+          open={deleteGoalOpen}
+          onOpenChange={setDeleteGoalOpen}
+          title="Goal"
+          description={selectedGoal?.title || ""}
+          onConfirm={() => {}}
+        />
+      )}
     </div>
   );
 };

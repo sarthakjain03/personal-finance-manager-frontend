@@ -55,6 +55,16 @@ const AddEditGoalDialog = ({
     }
   }, [goal]);
 
+  const handleReset = () => {
+    onOpenChange("");
+    setTitle("");
+    setDescription("");
+    setTarget("");
+    setCategory("");
+    setDeadline("");
+    setCurrent("");
+  };
+
   const handleSave = () => {
     if (
       title &&
@@ -82,18 +92,8 @@ const AddEditGoalDialog = ({
           deadline,
         })
       }
-      onOpenChange("");
+      handleReset();
     }
-  };
-
-  const handleReset = () => {
-    onOpenChange("");
-    setTitle("");
-    setDescription("");
-    setTarget("");
-    setCategory("");
-    setDeadline("");
-    setCurrent("");
   };
 
   return (

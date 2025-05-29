@@ -12,10 +12,15 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { Transaction } from "../types/transactions.types";
 
-const TransactionColumns: ColumnDef<Transaction>[] = [
+export const TransactionColumns: ({
+  handleEdit,
+  handleDelete,
+}) => ColumnDef<Transaction>[] = ({ handleEdit, handleDelete }) => [
   {
     accessorKey: "date",
     header: "Date",
@@ -57,6 +62,30 @@ const TransactionColumns: ColumnDef<Transaction>[] = [
         </div>
       );
     },
+  },
+  {
+    accessorKey: "action",
+    header: () => <div className="text-center">Action</div>,
+    cell: ({ row }) => (
+      <div className="flex justify-center gap-2">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="cursor-pointer"
+          onClick={() => handleEdit(row.original)}
+        >
+          <Edit className="w-4 h-4" />
+        </Button>
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => handleDelete(row.original.id)}
+          className="cursor-pointer"
+        >
+          <Trash2 className="w-4 h-4" />
+        </Button>
+      </div>
+    ),
   },
 ];
 
@@ -123,8 +152,14 @@ function DataTable<TData, TValue>({
   );
 }
 
-const TransactionsTable = ({ data = [] }: { data: Transaction[] }) => {
-  return <DataTable columns={TransactionColumns} data={data} />;
+const TransactionsTable = ({
+  data = [],
+  columns,
+}: {
+  data: Transaction[];
+  columns: ColumnDef<Transaction>[];
+}) => {
+  return <DataTable columns={columns} data={data} />;
 };
 
 export default TransactionsTable;
