@@ -5,14 +5,15 @@ import useResponsive from "@/hooks/use-responsive";
 import Navigation from "../components/navigation";
 import CurrentBalanceCard from "../components/current-balance";
 
-const TransactionsLazyView = lazy(() => import("./transactions-tab-view"));
+const TransactionsLazyView = lazy(() => import("./transactions-view"));
 const GoalsLazyView = lazy(() => import("./goals-view"));
+const BudgetsLazyView = lazy(() => import("./budgets-view"));
 
 const tabsViews = {
   summary: null,
   transactions: TransactionsLazyView,
   goals: GoalsLazyView,
-  budgets: null,
+  budgets: BudgetsLazyView,
 };
 
 const DashboardView = () => {

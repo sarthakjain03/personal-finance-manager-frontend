@@ -22,7 +22,7 @@ import useTransactions from "../hooks/use-transactions";
 import AddEditTransactionDialog from "../components/add-edit-transactions-dialog";
 import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 
-const TransactionsTabView = () => {
+const TransactionsView = () => {
   const { isMobile } = useResponsive();
   const {
     setSearch,
@@ -151,4 +151,4 @@ const TransactionsTabView = () => {
   );
 };
 
-export default TransactionsTabView;
+export default TransactionsView;
