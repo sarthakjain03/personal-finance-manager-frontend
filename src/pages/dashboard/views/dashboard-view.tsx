@@ -5,12 +5,13 @@ import useResponsive from "@/hooks/use-responsive";
 import Navigation from "../components/navigation";
 import CurrentBalanceCard from "../components/current-balance";
 
+const SummaryLazyView = lazy(() => import("./summary-view"));
 const TransactionsLazyView = lazy(() => import("./transactions-view"));
 const GoalsLazyView = lazy(() => import("./goals-view"));
 const BudgetsLazyView = lazy(() => import("./budgets-view"));
 
 const tabsViews = {
-  summary: null,
+  summary: SummaryLazyView,
   transactions: TransactionsLazyView,
   goals: GoalsLazyView,
   budgets: BudgetsLazyView,
@@ -21,7 +22,7 @@ const DashboardView = () => {
   const [activeTab, setActiveTab] = useState("summary");
   const [ComponentView, setComponentView] = useState<React.LazyExoticComponent<
     () => JSX.Element
-  > | null>(null);
+  > | null>(tabsViews.summary);
 
   const handleTabChange = (tabId: string) => {
     setActiveTab(tabId);

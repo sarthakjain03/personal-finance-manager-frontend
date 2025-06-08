@@ -35,8 +35,8 @@ const Navbar = ({ isLandingView = false }) => {
       } px-8 md:px-12 fixed w-full z-10 bg-bgMain`}
     >
       <div className="flex gap-2 items-center">
-        <Receipt color="#2A8E9E" size={24} />
-        <p className="text-2xl font-semibold text-sidemain w-full md:w-1/2">
+        <Receipt color="#2A8E9E" size={28} />
+        <p className="text-3xl font-semibold text-sidemain w-full md:w-1/2">
           FinSphere
         </p>
       </div>
