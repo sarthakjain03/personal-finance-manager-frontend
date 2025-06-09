@@ -12,7 +12,7 @@ import useGoogleAuth from "@/hooks/use-google-auth";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = ({ isLandingView = false }) => {
-  const { user, setOpenSignInModal } = useUserStore();
+  const { user } = useUserStore();
   const { isMobile } = useResponsive();
   const { loading, handleGoogleSignOut } = useGoogleAuth();
   const navigate = useNavigate();
@@ -26,6 +26,10 @@ const Navbar = ({ isLandingView = false }) => {
       .map((name) => name[0])
       .join("")
       .toUpperCase();
+  };
+
+  const handleSignInRedirect = () => {
+    navigate("/login");
   };
 
   return (
@@ -44,7 +48,7 @@ const Navbar = ({ isLandingView = false }) => {
         <Button
           className="cursor-pointer bg-main hover:bg-sidemain"
           size={isMobile ? "default" : "lg"}
-          onClick={() => setOpenSignInModal(true)}
+          onClick={handleSignInRedirect}
         >
           Sign In
         </Button>

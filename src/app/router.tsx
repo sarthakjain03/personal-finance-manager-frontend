@@ -9,7 +9,7 @@ import useUserStore from "@/store/user-store";
 import { User } from "@/types/user";
 
 const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
-
+const LoginPage = lazy(() => import("@/pages/login/login-view"));
 const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
 const DashboardPageView = lazy(
   () => import("@/pages/dashboard/views/dashboard-view")
@@ -30,6 +30,14 @@ const createAppRouter = ({ user }: { user: User | null }) => {
         ) : (
           <LandingPageView />
         ),
+    },
+    {
+      path: paths.login.path,
+      element: user ? (
+        <Navigate to={paths.dashboard.path} replace />
+      ) : (
+        <LoginPage />
+      ),
     },
     {
       path: paths.dashboard.path,

@@ -5,6 +5,4 @@ export interface UserStore {
   setUser: (user: User | null) => void;
   isUserAuthenticating: boolean;
   setIsUserAuthenticating: (isUserAuthenticating: boolean) => void;
-  openSignInModal: boolean;
-  setOpenSignInModal: (openSignInModal: boolean) => void;
 }

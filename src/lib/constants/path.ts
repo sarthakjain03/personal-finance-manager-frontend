@@ -3,6 +3,10 @@ const paths = {
     path: "/",
     getHref: () => "/",
   },
+  login: {
+    path: "/login",
+    getHref: () => "/login",
+  },
   dashboard: {
     path: "/dashboard",
     getHref: () => "/dashboard",

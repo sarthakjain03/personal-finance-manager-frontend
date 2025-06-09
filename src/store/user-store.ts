@@ -15,12 +15,6 @@ const useUserStore = create<UserStore>()(
           state.isUserAuthenticating = isUserAuthenticating;
         });
       },
-      openSignInModal: false,
-      setOpenSignInModal: (openSignInModal: boolean) => {
-        set((state) => {
-          state.openSignInModal = openSignInModal;
-        });
-      },
     })),
     {
       name: "user",
