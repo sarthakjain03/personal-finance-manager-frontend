@@ -2,8 +2,8 @@ export interface User {
     // id: string;
     name: string;
     email: string;
-    accessToken: string;
+    // accessToken: string;
     // refreshToken: string;
-    tokenExpiry: number;
+    // tokenExpiry: number;
     profilePhotoUrl?: string;
 }

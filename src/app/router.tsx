@@ -16,20 +16,10 @@ const DashboardPageView = lazy(
 );
 
 const createAppRouter = ({ user }: { user: User | null }) => {
-  const hasRedirected = sessionStorage.getItem("hasRedirected");
-
   return createBrowserRouter([
     {
       path: paths.home.path,
-      element:
-        user && !hasRedirected ? (
-          (() => {
-            sessionStorage.setItem("hasRedirected", "true");
-            return <Navigate to={paths.dashboard.path} replace />;
-          })()
-        ) : (
-          <LandingPageView />
-        ),
+      element: <LandingPageView />
     },
     {
       path: paths.login.path,

@@ -1,79 +1,55 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useUserStore from "@/store/user-store";
-import { googleSignInState } from "@/lib/env";
-import googleSignOut from "@/api/auth/google-signout";
-import getUser from "@/api/auth/get-user";
+import getGoogleUser from "@/api/auth/get-google-user";
 import { toast } from "sonner";
+import { useGoogleLogin, googleLogout } from "@react-oauth/google";
 
 const useGoogleAuth = () => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (user?.accessToken && user?.tokenExpiry) {
-      if (user.tokenExpiry <= Date.now()) {
-        handleGoogleSignOut();
-      }
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (user?.accessToken && user?.tokenExpiry) {
+  //     if (user.tokenExpiry <= Date.now()) {
+  //       handleGoogleSignOut();
+  //     }
+  //   }
+  // }, [])
+  // TODO: do something else for logout, handle all token logic in the backend
 
-  const handleGoogleCallback = async () => {
-    const hashParams = new URLSearchParams(location.hash.substring(1));
-    const accessToken = hashParams.get("access_token");
-    // const tokenType = hashParams.get("token_type");
-    const expiresIn = hashParams.get("expires_in");
-    const state = hashParams.get("state");
-    const error = hashParams.get("error");
-
-    if (!error && !accessToken) {
-      return;
-    }
-
-    if (state !== googleSignInState) {
-      toast.error("Invalid Google Sign In Attempt");
-
-    } else if (error) {
-      console.error("OAuth error:", error);
-      if (error !== "access_denied") {
-        toast.error("Error occurred while signing in with Google");
-      }
-
-    } else if (!accessToken) {
-      console.error("No access token generated");
-      toast.error("Error occurred while signing in with Google");
-
-    } else {
-      setLoading(true);
-      const userDetails = await getUser(accessToken);
+  const login = useGoogleLogin({
+    onSuccess: async (credentialResponse) => {
+      const accessToken = credentialResponse?.access_token
+      const expiresIn = credentialResponse?.expires_in
+      const userDetails = await getGoogleUser(accessToken, expiresIn);
       if (userDetails) {
         setUser({
           name: userDetails?.name,
           email: userDetails?.email,
           profilePhotoUrl: userDetails?.photoUrl,
-          accessToken,
-          tokenExpiry: Date.now() + Number(expiresIn) * 1000,
         });
         navigate("/dashboard");
-        setLoading(false)
-        return;
       }
-      setLoading(false)
-    }
-    
-    navigate("/");
-  };
+      setLoading(false);
+    },
+    onError: () => {
+      console.log("Login Failed");
+      setLoading(false);
+    },
+  });
+
+  const handleGoogleLogin = () => {
+    setLoading(true);
+    login();
+  }
 
   const handleGoogleSignOut = async () => {
     setLoading(true);
-    sessionStorage.removeItem("hasRedirected");
     try {
-      if (user?.accessToken) {
-        await googleSignOut(user.accessToken);
-        setUser(null);
-      }
+      googleLogout();
+      setUser(null);
 
       navigate("/");
       setLoading(false);
@@ -84,7 +60,7 @@ const useGoogleAuth = () => {
     }
   };
 
-  return { loading, handleGoogleSignOut, handleGoogleCallback };
+  return { loading, handleGoogleSignOut, handleGoogleLogin };
 };
 
 export default useGoogleAuth;
