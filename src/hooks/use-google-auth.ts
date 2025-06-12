@@ -10,13 +10,6 @@ const useGoogleAuth = () => {
   const { setUser } = useUserStore();
   const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (user?.accessToken && user?.tokenExpiry) {
-  //     if (user.tokenExpiry <= Date.now()) {
-  //       handleGoogleSignOut();
-  //     }
-  //   }
-  // }, [])
   // TODO: do something else for logout, handle all token logic in the backend
 
   const login = useGoogleLogin({

@@ -43,8 +43,6 @@ const steps = [
   },
 ];
 
-// TODO: complete the Terms of Service and Privacy Policy pages
-
 const LandingPage = () => {
   const { isMobile } = useResponsive();
   const { handleSignIn } = useLanding();
