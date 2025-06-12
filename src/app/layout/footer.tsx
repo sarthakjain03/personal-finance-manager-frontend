@@ -23,7 +23,7 @@ const Footer = ({ isLandingView = false }) => {
           <div className="flex flex-col gap-3 text-sidemain">
             <p className="font-medium">LEGAL</p>
             <div className="flex flex-col gap-2 text-sm">
-              <a href="/tos">Terms of Service</a>
+              <a href="/terms-of-service">Terms of Service</a>
               <a href="/privacy-policy">Privacy Policy</a>
             </div>
           </div>

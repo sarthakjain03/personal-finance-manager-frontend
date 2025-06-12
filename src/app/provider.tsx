@@ -4,13 +4,14 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleClientId } from "@/lib/env";
+import { Loader2 } from "lucide-react";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <Suspense
       fallback={
         <div className="h-screen w-screen flex justify-center items-center">
-          <p className="text-xl font-semibold">Loading...</p>
+          <Loader2 className="animate-spin" size={64} color="#2A8E9E" />
         </div>
       }
     >

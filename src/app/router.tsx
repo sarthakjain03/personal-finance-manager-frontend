@@ -7,10 +7,12 @@ import {
 import paths from "@/lib/constants/path";
 import useUserStore from "@/store/user-store";
 import { User } from "@/types/user";
+import LandingPageView from "@/pages/landing/landing-view";
+import TermsOfServicePageView from "@/pages/terms-of-service-view";
+import PrivacyPolicyPageView from "@/pages/privacy-policy-view";
 
 const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
 const LoginPage = lazy(() => import("@/pages/login/login-view"));
-const LandingPageView = lazy(() => import("@/pages/landing/landing-view"));
 const DashboardPageView = lazy(
   () => import("@/pages/dashboard/views/dashboard-view")
 );
@@ -19,7 +21,7 @@ const createAppRouter = ({ user }: { user: User | null }) => {
   return createBrowserRouter([
     {
       path: paths.home.path,
-      element: <LandingPageView />
+      Component: LandingPageView,
     },
     {
       path: paths.login.path,
@@ -36,6 +38,14 @@ const createAppRouter = ({ user }: { user: User | null }) => {
       ) : (
         <Navigate to={paths.home.path} replace />
       ),
+    },
+    {
+      path: paths["terms-of-service"].path,
+      element: <TermsOfServicePageView />,
+    },
+    {
+      path: paths["privacy-policy"].path,
+      element: <PrivacyPolicyPageView />,
     },
     {
       path: "*",
