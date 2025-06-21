@@ -4,31 +4,31 @@ import useUserStore from "@/store/user-store";
 import getGoogleUser from "@/api/auth/get-google-user";
 import { toast } from "sonner";
 import { useGoogleLogin, googleLogout } from "@react-oauth/google";
+import userLogout from "@/api/auth/user-logout";
 
 const useGoogleAuth = () => {
   const navigate = useNavigate();
   const { setUser } = useUserStore();
   const [loading, setLoading] = useState(false);
 
-  // TODO: do something else for logout, handle all token logic in the backend
-
   const login = useGoogleLogin({
     onSuccess: async (credentialResponse) => {
-      const accessToken = credentialResponse?.access_token
-      const expiresIn = credentialResponse?.expires_in
+      const accessToken = credentialResponse?.access_token;
+      const expiresIn = credentialResponse?.expires_in;
       const userDetails = await getGoogleUser(accessToken, expiresIn);
-      if (userDetails) {
+      if (userDetails?.success) {
+        navigate("/auth");
         setUser({
           name: userDetails?.name,
           email: userDetails?.email,
           profilePhotoUrl: userDetails?.photoUrl,
         });
-        navigate("/dashboard");
+      } else {
+        toast.error(userDetails?.message);
       }
       setLoading(false);
     },
     onError: () => {
-      console.log("Login Failed");
       setLoading(false);
     },
   });
@@ -36,15 +36,20 @@ const useGoogleAuth = () => {
   const handleGoogleLogin = () => {
     setLoading(true);
     login();
-  }
+  };
 
   const handleGoogleSignOut = async () => {
     setLoading(true);
     try {
       googleLogout();
-      setUser(null);
+      const response = await userLogout();
+      if (response?.success) {
+        setUser(null);
+        navigate("/");
+      } else {
+        toast.error(response?.message);
+      }
 
-      navigate("/");
       setLoading(false);
     } catch (error) {
       setLoading(false);

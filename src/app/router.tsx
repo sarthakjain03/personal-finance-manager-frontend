@@ -10,6 +10,7 @@ import { User } from "@/types/user";
 import LandingPageView from "@/pages/landing/landing-view";
 import TermsOfServicePageView from "@/pages/terms-of-service-view";
 import PrivacyPolicyPageView from "@/pages/privacy-policy-view";
+import AuthRedirectView from "@/pages/auth-redirect/auth-redirect-view";
 
 const PageNotFoundView = lazy(() => import("@/components/app/page-not-found"));
 const LoginPage = lazy(() => import("@/pages/login/login-view"));
@@ -22,6 +23,14 @@ const createAppRouter = ({ user }: { user: User | null }) => {
     {
       path: paths.home.path,
       Component: LandingPageView,
+    },
+    {
+      path: paths.auth.path,
+      element: user ? (
+        <Navigate to={paths.dashboard.path} replace />
+      ) : (
+        <AuthRedirectView />
+      ),
     },
     {
       path: paths.login.path,
