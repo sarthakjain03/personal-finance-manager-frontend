@@ -6,11 +6,13 @@ const login = async ({
   accessToken,
   expiresIn,
   name,
+  profilePhotoUrl,
 }: {
   email: string;
   accessToken: string;
   expiresIn: number;
   name: string;
+  profilePhotoUrl: string;
 }) => {
   try {
     const response = await axios.post(
@@ -20,11 +22,13 @@ const login = async ({
         accessToken,
         expiresIn,
         name,
+        profilePhotoUrl,
       },
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
+        withCredentials: true,
       }
     );
 

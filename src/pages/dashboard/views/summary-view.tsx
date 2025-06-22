@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { TrendingUp, TrendingDown, DollarSign, CreditCard } from "lucide-react";
 import {
   Card,
@@ -26,6 +27,10 @@ import {
   CategoryWiseSpendingI,
   BudgetSummaryI,
 } from "../types/summary.types";
+import { cn } from "@/lib/utils";
+import { MonthlyCardsData } from "../types/summary.types";
+import getMonthlyCardsData from "../apis/summary/get-monthly-cards-data";
+import { toast } from "sonner";
 
 const spendingData: SpendingSummaryI[] = [
   { month: "Jan", amount: 2400 },
@@ -52,6 +57,34 @@ const budgetData: BudgetSummaryI[] = [
 ];
 
 const SummaryView = () => {
+  const [loading, setLoading] = useState(false);
+  const [monthlyCardsData, setMonthlyCardsData] =
+    useState<MonthlyCardsData | null>(null);
+
+  const fetchMonthlyCardsData = async () => {
+    try {
+      const response = await getMonthlyCardsData();
+      if (response?.success) {
+        setMonthlyCardsData(response?.data);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+  };
+
+  const getAllSummaryData = async () => {
+    setLoading(true);
+    await fetchMonthlyCardsData();
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    getAllSummaryData();
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -63,10 +96,33 @@ const SummaryView = () => {
             <DollarSign className="h-5 w-5 text-green-500" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-900">$5,200</div>
-            <p className="text-xs text-green-600 flex items-center gap-1 mt-1">
-              <TrendingUp className="h-3 w-3" />
-              +3% from last month
+            <div className="text-2xl font-bold text-gray-900">
+              {monthlyCardsData?.incomeStats?.currentMonth ?? 0}
+            </div>
+            <p
+              className={cn(
+                "text-xs flex items-center gap-1 mt-1",
+                monthlyCardsData?.incomeStats?.percentChange && [
+                  monthlyCardsData?.incomeStats?.percentChange === 0 &&
+                    "text-gray-500",
+                  monthlyCardsData?.incomeStats?.percentChange < 0 &&
+                    "text-red-600",
+                  monthlyCardsData?.incomeStats?.percentChange > 0 &&
+                    "text-green-600",
+                ]
+              )}
+            >
+              {monthlyCardsData?.incomeStats?.percentChange && (
+                <>
+                  {monthlyCardsData?.incomeStats?.percentChange > 0 ? (
+                    <TrendingUp className="h-3 w-3" />
+                  ) : (
+                    <TrendingDown className="h-3 w-3" />
+                  )}
+                </>
+              )}
+              {monthlyCardsData?.incomeStats?.percentChange ?? 0}% from last
+              month
             </p>
           </CardContent>
         </Card>

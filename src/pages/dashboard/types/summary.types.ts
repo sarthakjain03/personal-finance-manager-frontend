@@ -14,3 +14,16 @@ export interface SpendingSummaryI {
   month: string;
   amount: number;
 }
+
+export interface MonthlyCardsData {
+  incomeStats: {
+    currentMonth: number;
+    lastMonth: number;
+    percentChange: number;
+  };
+  spendingStats: {
+    currentMonth: number;
+    lastMonth: number;
+    percentChange: number;
+  };
+}

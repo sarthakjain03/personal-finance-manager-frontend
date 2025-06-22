@@ -10,6 +10,7 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.request.use(
@@ -33,7 +34,7 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         console.error("Unauthorized!");
-        window.location.href = "/login";
+        // window.location.href = "/login";
       } else if (error.response.status === 403) {
         console.error("Forbidden! You do not have permission.");
       } else if (error.response.status >= 500) {

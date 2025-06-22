@@ -17,9 +17,10 @@ const getGoogleUser = async (accessToken: string, expiresIn: number) => {
       accessToken,
       expiresIn,
       name: response?.data?.names[0]?.displayName,
+      profilePhotoUrl: response?.data?.photos[0]?.url,
     });
 
-    if (!userLogin.success) {
+    if (!userLogin?.success) {
       return userLogin;
     }
 
@@ -27,6 +28,7 @@ const getGoogleUser = async (accessToken: string, expiresIn: number) => {
       name: response?.data?.names[0]?.displayName,
       email: response?.data?.emailAddresses[0]?.value,
       photoUrl: response?.data?.photos[0]?.url,
+      currentBalance: userLogin?.data?.currentBalance,
     };
 
     return {

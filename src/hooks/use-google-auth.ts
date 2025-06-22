@@ -22,6 +22,7 @@ const useGoogleAuth = () => {
           name: userDetails?.name,
           email: userDetails?.email,
           profilePhotoUrl: userDetails?.photoUrl,
+          currentBalance: userDetails?.currentBalance,
         });
       } else {
         toast.error(userDetails?.message);
