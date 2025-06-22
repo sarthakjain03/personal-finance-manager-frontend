@@ -4,6 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 import { axiosBaseUrl } from "../lib/env";
+import useUserStore from "@/store/user-store";
 
 const axiosInstance = axios.create({
   baseURL: axiosBaseUrl,
@@ -34,6 +35,8 @@ axiosInstance.interceptors.response.use(
     if (error.response) {
       if (error.response.status === 401) {
         console.error("Unauthorized!");
+        useUserStore.getState().setUser(null);
+        window.location.href = "/";
         // window.location.href = "/login";
       } else if (error.response.status === 403) {
         console.error("Forbidden! You do not have permission.");

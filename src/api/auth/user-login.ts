@@ -1,5 +1,14 @@
-import axios from "axios";
-import { axiosBaseUrl } from "@/lib/env";
+import { ApiResponseData } from "@/types/api-response";
+import { errorHandler } from "@/utils/error-handler";
+import axiosInstance from "@/utils/axios-client";
+
+interface LoginData {
+  email: string;
+  accessToken: string;
+  expiresIn: number;
+  name: string;
+  profilePhotoUrl: string;
+}
 
 const login = async ({
   email,
@@ -7,16 +16,12 @@ const login = async ({
   expiresIn,
   name,
   profilePhotoUrl,
-}: {
-  email: string;
-  accessToken: string;
-  expiresIn: number;
-  name: string;
-  profilePhotoUrl: string;
-}) => {
+}: LoginData) => {
   try {
-    const response = await axios.post(
-      `${axiosBaseUrl}/auth/login`,
+    const response = await axiosInstance.post<
+      ApiResponseData<{ currentBalance: number }>
+    >(
+      `/auth/login`,
       {
         email,
         accessToken,
@@ -34,12 +39,7 @@ const login = async ({
 
     return response?.data;
   } catch (err: unknown) {
-    console.error(err);
-    const error = err as Error;
-    return {
-      success: false,
-      message: error.message,
-    };
+    errorHandler(err);
   }
 };
 

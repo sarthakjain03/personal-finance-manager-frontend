@@ -121,13 +121,16 @@ const TransactionsView = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <TransactionsTable data={transactions || []} columns={tableColumns || []} />
+            <TransactionsTable
+              data={transactions || []}
+              columns={tableColumns || []}
+            />
           </div>
         </CardContent>
       </Card>
 
       {/* Add/Edit Transaction Dialog */}
-      {isTransactionDialogOpen !== "" && (
+      {isTransactionDialogOpen !== "" && selectedTransaction && (
         <AddEditTransactionDialog
           open={isTransactionDialogOpen !== ""}
           transaction={selectedTransaction}

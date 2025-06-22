@@ -64,7 +64,7 @@ const SummaryView = () => {
   const fetchMonthlyCardsData = async () => {
     try {
       const response = await getMonthlyCardsData();
-      if (response?.success) {
+      if (response?.success && response?.data) {
         setMonthlyCardsData(response?.data);
       } else {
         toast.error(response?.message);
