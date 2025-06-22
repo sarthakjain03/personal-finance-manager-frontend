@@ -22,68 +22,30 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-import {
-  SpendingSummaryI,
-  CategoryWiseSpendingI,
-  BudgetSummaryI,
-} from "../types/summary.types";
 import { cn } from "@/lib/utils";
-import { MonthlyCardsData } from "../types/summary.types";
-import getMonthlyCardsData from "../apis/summary/get-monthly-cards-data";
-import { toast } from "sonner";
+import useSummary from "../hooks/use-summary";
 
-const spendingData: SpendingSummaryI[] = [
-  { month: "Jan", amount: 2400 },
-  { month: "Feb", amount: 2800 },
-  { month: "Mar", amount: 2200 },
-  { month: "Apr", amount: 3200 },
-  { month: "May", amount: 2900 },
-  { month: "Jun", amount: 3400 },
-];
-
-const categoryData: CategoryWiseSpendingI[] = [
-  { name: "Food", value: 1200, color: "#3B82F6" },
-  { name: "Transport", value: 800, color: "#10B981" },
-  { name: "Entertainment", value: 600, color: "#F59E0B" },
-  { name: "Shopping", value: 900, color: "#EF4444" },
-  { name: "Bills", value: 1100, color: "#8B5CF6" },
-];
-
-const budgetData: BudgetSummaryI[] = [
-  { category: "Food", spent: 1200, budget: 1500 },
-  { category: "Transport", spent: 800, budget: 1000 },
-  { category: "Entertainment", spent: 600, budget: 800 },
-  { category: "Shopping", spent: 900, budget: 700 },
-];
+const pieChartColors = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
 
 const SummaryView = () => {
-  const [loading, setLoading] = useState(false);
-  const [monthlyCardsData, setMonthlyCardsData] =
-    useState<MonthlyCardsData | null>(null);
-
-  const fetchMonthlyCardsData = async () => {
-    try {
-      const response = await getMonthlyCardsData();
-      if (response?.success && response?.data) {
-        setMonthlyCardsData(response?.data);
-      } else {
-        toast.error(response?.message);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Something went wrong");
-    }
-  };
-
-  const getAllSummaryData = async () => {
-    setLoading(true);
-    await fetchMonthlyCardsData();
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    getAllSummaryData();
-  }, []);
+  const {
+    loading,
+    pieChartLoading,
+    budgetChartLoading,
+    spendTrendChartLoading,
+    monthlyCardsData,
+    categoryPieChartData,
+    pieChartTimeline,
+    budgetChartData,
+    spendTrendChartData,
+    spendTrendChartTimeline,
+    fetchMonthlyCardsData,
+    fetchCategoryWiseExpensesData,
+    fetchBudgetChartData,
+    fetchTrendChartData,
+    setPieChartTimeline,
+    setSpendTrendChartTimeline,
+  } = useSummary();
 
   return (
     <div className="space-y-8">
@@ -95,36 +57,35 @@ const SummaryView = () => {
             </CardTitle>
             <DollarSign className="h-5 w-5 text-green-500" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">
-              {monthlyCardsData?.incomeStats?.currentMonth ?? 0}
-            </div>
-            <p
-              className={cn(
-                "text-xs flex items-center gap-1 mt-1",
-                monthlyCardsData?.incomeStats?.percentChange && [
+          {monthlyCardsData?.incomeStats?.percentChange !== undefined && (
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900">
+                {monthlyCardsData?.incomeStats?.currentMonth ?? 0}
+              </div>
+              <p
+                className={cn("text-xs flex items-center gap-1 mt-1", [
                   monthlyCardsData?.incomeStats?.percentChange === 0 &&
                     "text-gray-500",
                   monthlyCardsData?.incomeStats?.percentChange < 0 &&
                     "text-red-600",
                   monthlyCardsData?.incomeStats?.percentChange > 0 &&
                     "text-green-600",
-                ]
-              )}
-            >
-              {monthlyCardsData?.incomeStats?.percentChange && (
-                <>
-                  {monthlyCardsData?.incomeStats?.percentChange > 0 ? (
-                    <TrendingUp className="h-3 w-3" />
-                  ) : (
-                    <TrendingDown className="h-3 w-3" />
-                  )}
-                </>
-              )}
-              {monthlyCardsData?.incomeStats?.percentChange ?? 0}% from last
-              month
-            </p>
-          </CardContent>
+                ])}
+              >
+                {monthlyCardsData?.incomeStats?.percentChange && (
+                  <>
+                    {monthlyCardsData?.incomeStats?.percentChange > 0 ? (
+                      <TrendingUp className="h-3 w-3" />
+                    ) : (
+                      <TrendingDown className="h-3 w-3" />
+                    )}
+                  </>
+                )}
+                {monthlyCardsData?.incomeStats?.percentChange ?? 0}% from last
+                month
+              </p>
+            </CardContent>
+          )}
         </Card>
 
         <Card className="hover:shadow-lg transition-shadow gap-4">
@@ -134,13 +95,37 @@ const SummaryView = () => {
             </CardTitle>
             <CreditCard className="h-5 w-5 text-red-500" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-gray-900">$3,420</div>
-            <p className="text-xs text-red-600 flex items-center gap-1 mt-1">
-              <TrendingUp className="h-3 w-3" />
-              +8% from last month
-            </p>
-          </CardContent>
+          {monthlyCardsData?.spendingStats?.percentChange !== undefined && (
+            <CardContent>
+              <div className="text-2xl font-bold text-gray-900">
+                {monthlyCardsData?.spendingStats?.currentMonth ?? 0}
+              </div>
+              <p
+                className={cn("text-xs flex items-center gap-1 mt-1", [
+                  monthlyCardsData?.spendingStats?.percentChange === 0 &&
+                    "text-gray-500",
+                  monthlyCardsData?.spendingStats?.percentChange > 0 &&
+                    "text-red-600",
+                  monthlyCardsData?.spendingStats?.percentChange < 0 &&
+                    "text-green-600",
+                ])}
+              >
+                {monthlyCardsData?.spendingStats?.percentChange && (
+                  <>
+                    {monthlyCardsData?.spendingStats?.percentChange < 0 ? (
+                      <TrendingUp className="h-3 w-3" />
+                    ) : (
+                      <TrendingDown className="h-3 w-3" />
+                    )}
+                  </>
+                )}
+                {monthlyCardsData?.spendingStats?.percentChange < 0
+                  ? monthlyCardsData?.spendingStats?.percentChange * -1
+                  : monthlyCardsData?.spendingStats?.percentChange}
+                % from last month
+              </p>
+            </CardContent>
+          )}
         </Card>
       </div>
 
@@ -152,18 +137,28 @@ const SummaryView = () => {
               <CardTitle>Spending Trend</CardTitle>
               <CardDescription>Your spendings this year</CardDescription>
             </div>
-            <ToggleGroup value={"Month"} type="single" onValueChange={() => {}}>
-              <ToggleGroupItem value="Month" className="p-4 border">
+            <ToggleGroup
+              value={spendTrendChartTimeline}
+              type="single"
+              onValueChange={(value) => setSpendTrendChartTimeline(value)}
+            >
+              <ToggleGroupItem
+                value="month"
+                className="p-4 border cursor-pointer"
+              >
                 Month
               </ToggleGroupItem>
-              <ToggleGroupItem value="Year" className="p-4 border">
+              <ToggleGroupItem
+                value="year"
+                className="p-4 border cursor-pointer"
+              >
                 Year
               </ToggleGroupItem>
             </ToggleGroup>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={spendingData}>
+              <AreaChart data={spendTrendChartData}>
                 <defs>
                   <linearGradient id="colorAmount" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#3B82F6" stopOpacity={0.3} />
@@ -192,11 +187,21 @@ const SummaryView = () => {
               <CardTitle>Spending by Category</CardTitle>
               <CardDescription>This month's expense breakdown</CardDescription>
             </div>
-            <ToggleGroup value={"Year"} type="single" onValueChange={() => {}}>
-              <ToggleGroupItem value="Month" className="p-4 border">
+            <ToggleGroup
+              value={pieChartTimeline}
+              type="single"
+              onValueChange={(value) => setPieChartTimeline(value)}
+            >
+              <ToggleGroupItem
+                value="month"
+                className="p-4 border cursor-pointer"
+              >
                 Month
               </ToggleGroupItem>
-              <ToggleGroupItem value="Year" className="p-4 border">
+              <ToggleGroupItem
+                value="year"
+                className="p-4 border cursor-pointer"
+              >
                 Year
               </ToggleGroupItem>
             </ToggleGroup>
@@ -205,7 +210,7 @@ const SummaryView = () => {
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
                 <Pie
-                  data={categoryData}
+                  data={categoryPieChartData}
                   cx="50%"
                   cy="50%"
                   outerRadius={100}
@@ -215,8 +220,11 @@ const SummaryView = () => {
                     `${name} ${(percent * 100).toFixed(0)}%`
                   }
                 >
-                  {categoryData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  {categoryPieChartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={pieChartColors[pieChartColors.length % index]}
+                    />
                   ))}
                 </Pie>
                 <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
@@ -235,7 +243,7 @@ const SummaryView = () => {
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={budgetData}>
+            <BarChart data={budgetChartData}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="category" />
               <YAxis />

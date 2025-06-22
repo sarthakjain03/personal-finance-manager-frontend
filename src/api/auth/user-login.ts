@@ -16,7 +16,7 @@ const login = async ({
   expiresIn,
   name,
   profilePhotoUrl,
-}: LoginData) => {
+}: LoginData): Promise<ApiResponseData<{ currentBalance: number }>> => {
   try {
     const response = await axiosInstance.post<
       ApiResponseData<{ currentBalance: number }>
@@ -39,7 +39,7 @@ const login = async ({
 
     return response?.data;
   } catch (err: unknown) {
-    errorHandler(err);
+    return errorHandler(err);
   }
 };
 

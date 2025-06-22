@@ -1,20 +1,3 @@
-export interface BudgetSummaryI {
-  category: string;
-  spent: number;
-  budget: number;
-}
-
-export interface CategoryWiseSpendingI {
-  name: string;
-  value: number;
-  color: string;
-}
-
-export interface SpendingSummaryI {
-  month: string;
-  amount: number;
-}
-
 export interface MonthlyCardsData {
   incomeStats: {
     currentMonth: number;
@@ -27,3 +10,25 @@ export interface MonthlyCardsData {
     percentChange: number;
   };
 }
+
+export interface TrendChartObject {
+  label: string;
+  value: number;
+}
+
+export type TrendChartData = TrendChartObject[];
+
+export interface BudgetSummaryChartObject {
+  category: string;
+  spentAmount: number;
+  budgetAmount: number;
+}
+
+export type BudgetSummaryChartData = BudgetSummaryChartObject[];
+
+export interface CategoryWiseExpensesObject {
+  name: string;
+  value: number;
+}
+
+export type CategoryWiseExpensesData = CategoryWiseExpensesObject[];

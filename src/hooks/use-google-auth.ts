@@ -17,13 +17,19 @@ const useGoogleAuth = () => {
       const expiresIn = credentialResponse?.expires_in;
       const userDetails = await getGoogleUser(accessToken, expiresIn);
       if (userDetails?.success) {
-        navigate("/auth");
-        setUser({
-          name: userDetails?.name,
-          email: userDetails?.email,
-          profilePhotoUrl: userDetails?.photoUrl,
-          currentBalance: userDetails?.currentBalance,
-        });
+        if (
+          userDetails?.currentBalance !== undefined &&
+          userDetails?.name !== undefined &&
+          userDetails?.email !== undefined
+        ) {
+          navigate("/auth");
+          setUser({
+            name: userDetails?.name,
+            email: userDetails?.email,
+            profilePhotoUrl: userDetails?.photoUrl,
+            currentBalance: userDetails?.currentBalance,
+          });
+        }
       } else {
         toast.error(userDetails?.message);
       }
