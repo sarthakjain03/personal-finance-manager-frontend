@@ -19,19 +19,21 @@ import { Progress } from "@/components/ui/progress";
 import useBudgets from "../hooks/use-budgets";
 import AddEditBudgetDialog from "../components/add-edit-budget-dialog";
 import DeleteConfirmDialog from "../components/delete-confirm-dialog";
+import { CategoryIcons } from "@/lib/constants/categories";
 
 const BudgetsView = () => {
   const { isMobile } = useResponsive();
   const {
     deleteBudgetOpen,
     setDeleteBudgetOpen,
-    totalAllocated,
-    totalRemaining,
-    totalSpent,
+    totals,
+    isLoading,
+    availableCategories,
     handleDeleteBudget,
     handleEditBudget,
     handleCreateBudget,
     budgets,
+    createBudget,
     selectedBudget,
     getStatusColor,
     isBudgetDialogOpen,
@@ -69,7 +71,7 @@ const BudgetsView = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              ${totalAllocated.toLocaleString()}
+              {totals.totalAllocated.toLocaleString()}
             </div>
             <p className="text-xs opacity-90">Monthly budget</p>
           </CardContent>
@@ -83,10 +85,10 @@ const BudgetsView = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900">
-              ${totalSpent.toLocaleString()}
+              {totals.totalSpent.toLocaleString()}
             </div>
             <p className="text-xs text-gray-600">
-              {((totalSpent / totalAllocated) * 100).toFixed(1)}% of budget
+              {totals.totalSpentPercentage}% of budget
             </p>
           </CardContent>
         </Card>
@@ -100,13 +102,13 @@ const BudgetsView = () => {
           <CardContent>
             <div
               className={`text-2xl font-bold ${
-                totalRemaining >= 0 ? "text-green-600" : "text-red-600"
+                totals.totalRemaining >= 0 ? "text-green-600" : "text-red-600"
               }`}
             >
-              ${Math.abs(totalRemaining).toLocaleString()}
+              {Math.abs(totals.totalRemaining).toLocaleString()}
             </div>
             <p className="text-xs text-gray-600">
-              {totalRemaining >= 0 ? "Under budget" : "Over budget"}
+              {totals.totalRemaining >= 0 ? "Under budget" : "Over budget"}
             </p>
           </CardContent>
         </Card>
@@ -115,25 +117,39 @@ const BudgetsView = () => {
       {/* Budget Categories */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {budgets.map((budget) => {
-          const percentage = Math.min((budget.spent / budget.allocated) * 100, 100);
           return (
-            <Card key={budget.id} className="hover:shadow-lg transition-shadow">
+            <Card
+              key={budget._id}
+              className="hover:shadow-lg transition-shadow"
+            >
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{budget.icon}</span>
+                    <span className="text-2xl">
+                      {CategoryIcons[budget.category]}
+                    </span>
                     <div>
-                      <CardTitle className="text-lg">{budget.category}</CardTitle>
-                      <CardDescription>Monthly budget allocation</CardDescription>
+                      <CardTitle className="text-lg">
+                        {budget.category}
+                      </CardTitle>
+                      <CardDescription>
+                        Monthly budget allocation
+                      </CardDescription>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    {getStatusColor(budget.spent, budget.allocated)?.includes("red") ? (
-                        <AlertTriangle className="h-4 w-4 text-red-600" />
-                    ) : getStatusColor(budget.spent, budget.allocated)?.includes("yellow") ? (
-                        <AlertTriangle className="h-4 w-4 text-yellow-600" />
+                    {getStatusColor(
+                      budget.spentAmount,
+                      budget.budgetAmount
+                    )?.includes("red") ? (
+                      <AlertTriangle className="h-4 w-4 text-red-600" />
+                    ) : getStatusColor(
+                        budget.spentAmount,
+                        budget.budgetAmount
+                      )?.includes("yellow") ? (
+                      <AlertTriangle className="h-4 w-4 text-yellow-600" />
                     ) : (
-                        <CheckCircle className="h-4 w-4 text-green-600" />
+                      <CheckCircle className="h-4 w-4 text-green-600" />
                     )}
                     <div className="flex gap-1">
                       <Button
@@ -160,25 +176,39 @@ const BudgetsView = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-xl font-bold text-gray-900">
-                      ${budget.spent.toLocaleString()}
+                      {budget.spentAmount.toLocaleString()}
                     </p>
                     <p className="text-sm text-gray-600">
-                      of ${budget.allocated.toLocaleString()}
+                      of {budget.budgetAmount.toLocaleString()}
                     </p>
                   </div>
                   <div className="text-right">
-                    <p className={`text-lg font-semibold ${getStatusColor(budget.spent, budget.allocated)}`}>
-                      {percentage.toFixed(1)}%
+                    <p
+                      className={`text-lg font-semibold ${getStatusColor(
+                        budget.spentAmount,
+                        budget.budgetAmount
+                      )}`}
+                    >
+                      {budget.spentPercentage}%
                     </p>
                     <p className="text-xs text-gray-500">Used</p>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Progress value={percentage} className="h-2" />
+                  <Progress value={budget.spentPercentage} className="h-2" />
                   <div className="flex justify-between text-sm">
-                    <span className={budget.remaining >= 0 ? 'text-green-600' : 'text-red-600'}>
-                      {budget.remaining >= 0 ? 'Remaining' : 'Over budget'}: ${Math.abs(budget.remaining)}
+                    <span
+                      className={
+                        budget.remainingAmount >= 0
+                          ? "text-green-600"
+                          : "text-red-600"
+                      }
+                    >
+                      {budget.remainingAmount >= 0
+                        ? "Remaining"
+                        : "Over budget"}
+                      : {Math.abs(budget.remainingAmount)}
                     </span>
                   </div>
                 </div>
@@ -194,8 +224,9 @@ const BudgetsView = () => {
           open={isBudgetDialogOpen !== ""}
           onOpenChange={setIsBudgetDialogOpen}
           budget={selectedBudget}
-          onNewSave={() => {}}
+          onNewSave={createBudget}
           onEditSave={() => {}}
+          availableCategories={availableCategories}
           action={isBudgetDialogOpen === "new" ? "Create" : "Edit"}
         />
       )}

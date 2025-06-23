@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { AddEditBudgetDialogProps } from "../types/budgets.types";
+import { CategoryIcons } from "@/lib/constants/categories";
 
 const categoryOptions = [
   { value: "Food & Dining", icon: "🍽️" },
@@ -39,42 +40,35 @@ const AddEditBudgetDialog = ({
   onNewSave,
   onEditSave,
   action,
+  availableCategories,
 }: AddEditBudgetDialogProps) => {
   const [category, setCategory] = useState("");
-  const [allocated, setAllocated] = useState("");
-  const [icon, setIcon] = useState("");
+  const [budgetAmount, setBudgetAmount] = useState("");
 
   useEffect(() => {
     if (budget) {
       setCategory(budget.category);
-      setAllocated(budget.allocated.toString());
-      setIcon(budget.icon);
+      setBudgetAmount(budget.budgetAmount.toString());
     }
   }, [budget]);
 
   const handleReset = () => {
     onOpenChange("");
     setCategory("");
-    setAllocated("");
-    setIcon("");
+    setBudgetAmount("");
   };
 
   const handleSave = () => {
-    if (budget && category && allocated) {
-      const selectedCategory = categoryOptions.find(
-        (cat) => cat.value === category
-      );
+    if (category && budgetAmount) {
       if (action === "Create") {
         onNewSave({
           category,
-          allocated: parseFloat(allocated),
-          icon: selectedCategory?.icon || icon,
+          budgetAmount: parseFloat(budgetAmount),
         });
-      } else if (budget?.id) {
-        onEditSave(budget?.id, {
+      } else if (budget?._id) {
+        onEditSave(budget?._id, {
           category,
-          allocated: parseFloat(allocated),
-          icon: selectedCategory?.icon || icon,
+          budgetAmount: parseFloat(budgetAmount),
         });
       }
       handleReset();
@@ -100,14 +94,23 @@ const AddEditBudgetDialog = ({
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                {categoryOptions?.map((cat) => (
-                  <SelectItem key={cat.value} value={cat.value}>
-                    <div className="flex items-center gap-2">
-                      <span>{cat.icon}</span>
-                      <span>{cat.value}</span>
-                    </div>
-                  </SelectItem>
-                ))}
+                {budget
+                  ? [...availableCategories, budget.category]?.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        <div className="flex items-center gap-2">
+                          <span>{CategoryIcons[cat]}</span>
+                          <span>{cat}</span>
+                        </div>
+                      </SelectItem>
+                    ))
+                  : availableCategories?.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        <div className="flex items-center gap-2">
+                          <span>{CategoryIcons[cat]}</span>
+                          <span>{cat}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
               </SelectContent>
             </Select>
           </div>
@@ -118,18 +121,24 @@ const AddEditBudgetDialog = ({
             <Input
               id="allocated"
               type="number"
-              value={allocated}
-              onChange={(e) => setAllocated(e.target.value)}
+              value={budgetAmount}
+              onChange={(e) => setBudgetAmount(e.target.value)}
               className="col-span-3"
               placeholder="Enter Amount"
             />
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={handleReset}>
+          <Button
+            variant="outline"
+            onClick={handleReset}
+            className="cursor-pointer"
+          >
             Cancel
           </Button>
-          <Button onClick={handleSave}>Save Budget</Button>
+          <Button onClick={handleSave} className="cursor-pointer">
+            Save Budget
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

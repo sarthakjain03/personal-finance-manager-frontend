@@ -1,10 +1,10 @@
 export interface Budget {
-  id: string;
+  _id: string;
   category: string;
-  allocated: number;
-  spent: number;
-  remaining: number;
-  icon: string;
+  budgetAmount: number;
+  spentAmount: number;
+  remainingAmount: number;
+  spentPercentage: number;
 }
 
 export interface AddEditBudgetDialogProps {
@@ -12,10 +12,15 @@ export interface AddEditBudgetDialogProps {
   onOpenChange: (open: string) => void;
   budget: Budget | null | undefined;
   onEditSave: (budgetId: string, updatedBudget: Partial<Budget>) => void;
-  onNewSave: (budget: {
-    category: string;
-    allocated: number;
-    icon: string;
-  }) => void;
+  onNewSave: (budget: { category: string; budgetAmount: number }) => void;
   action: string;
+  availableCategories: string[];
+}
+
+export interface BudgetFetchResponse {
+  budget: Budget[];
+  totalBudget: number;
+  totalSpent: number;
+  totalRemaining: number;
+  totalSpentPercentage: number;
 }

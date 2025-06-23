@@ -39,10 +39,6 @@ const SummaryView = () => {
     budgetChartData,
     spendTrendChartData,
     spendTrendChartTimeline,
-    fetchMonthlyCardsData,
-    fetchCategoryWiseExpensesData,
-    fetchBudgetChartData,
-    fetchTrendChartData,
     setPieChartTimeline,
     setSpendTrendChartTimeline,
   } = useSummary();

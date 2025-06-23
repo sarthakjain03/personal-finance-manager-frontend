@@ -1,62 +1,91 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Budget } from "../types/budgets.types";
-
-const initialBudgets: Budget[] = [
-  {
-    id: "1",
-    category: "Food & Dining",
-    allocated: 1500,
-    spent: 1200,
-    remaining: 300,
-    icon: "🍽️",
-  },
-  {
-    id: "2",
-    category: "Transportation",
-    allocated: 1000,
-    spent: 800,
-    remaining: 200,
-    icon: "🚗",
-  },
-  {
-    id: "3",
-    category: "Entertainment",
-    allocated: 800,
-    spent: 650,
-    remaining: 150,
-    icon: "🎬",
-  },
-  {
-    id: "4",
-    category: "Shopping",
-    allocated: 700,
-    spent: 920,
-    remaining: -220,
-    icon: "🛍️",
-  },
-  {
-    id: "5",
-    category: "Bills & Utilities",
-    allocated: 1200,
-    spent: 1100,
-    remaining: 100,
-    icon: "💡",
-  },
-  {
-    id: "6",
-    category: "Health & Fitness",
-    allocated: 400,
-    spent: 180,
-    remaining: 220,
-    icon: "💪",
-  },
-];
+import { Categories } from "@/lib/constants/categories";
+import { toast } from "sonner";
+import getAllBudgets from "../apis/budget/get-all-budgets";
+import addNewBudget from "../apis/budget/add-new-budget";
 
 const useBudgets = () => {
-  const [budgets, setBudgets] = useState<Budget[]>(initialBudgets);
+  const [budgets, setBudgets] = useState<Budget[]>([]);
   const [selectedBudget, setSelectedBudget] = useState<Budget | null>(null);
   const [deleteBudgetOpen, setDeleteBudgetOpen] = useState(false);
   const [isBudgetDialogOpen, setIsBudgetDialogOpen] = useState("");
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+  const [totals, setTotals] = useState({
+    totalAllocated: 0,
+    totalSpent: 0,
+    totalRemaining: 0,
+    totalSpentPercentage: 0,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const fetchAllBudgets = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllBudgets();
+      if (response?.success && response?.data) {
+        setBudgets(response?.data.budget);
+        setTotals({
+          totalAllocated: response?.data.totalBudget,
+          totalSpent: response?.data.totalSpent,
+          totalRemaining: response?.data.totalRemaining,
+          totalSpentPercentage: response?.data.totalSpentPercentage,
+        });
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+    setIsLoading(false);
+  };
+
+  const createBudget = async (budget: {
+    category: string;
+    budgetAmount: number;
+  }) => {
+    setIsLoading(true);
+    try {
+      const response = await addNewBudget({
+        category: budget.category,
+        budgetAmount: budget.budgetAmount,
+      });
+      if (response?.success && response?.data) {
+        setBudgets((prev) => {
+          if (response?.data?.budget) {
+            return [...prev, response?.data?.budget];
+          }
+          return prev;
+        });
+        setTotals({
+          totalAllocated: response?.data.totalBudget,
+          totalSpent: response?.data.totalSpent,
+          totalRemaining: response?.data.totalRemaining,
+          totalSpentPercentage: response?.data.totalSpentPercentage,
+        });
+        toast.success(response?.message);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while adding budget");
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAllBudgets();
+  }, []);
+
+  useEffect(() => {
+    setAvailableCategories(
+      Categories.filter(
+        (cat) => !budgets?.some((budget) => budget.category === cat)
+      )
+    );
+  }, [budgets]);
 
   const getStatusColor = (spent: number, allocated: number) => {
     const percentage = (spent / allocated) * 100;
@@ -85,13 +114,12 @@ const useBudgets = () => {
   const handleSaveEditBudget = (updatedBudget: Budget) => {
     setBudgets(
       budgets.map((budget) =>
-        budget.id === updatedBudget.id
+        budget._id === updatedBudget._id
           ? {
               ...budget,
               category: updatedBudget.category,
-              allocated: updatedBudget.allocated,
-              remaining: updatedBudget.allocated - budget.spent,
-              icon: updatedBudget.icon,
+              budgetAmount: updatedBudget.budgetAmount,
+              remaining: updatedBudget.budgetAmount - budget.spentAmount,
             }
           : budget
       )
@@ -105,17 +133,10 @@ const useBudgets = () => {
 
   const handleConfirmDelete = () => {
     if (selectedBudget) {
-      setBudgets(budgets.filter((budget) => budget.id !== selectedBudget.id));
+      setBudgets(budgets.filter((budget) => budget._id !== selectedBudget._id));
       setSelectedBudget(null);
     }
   };
-
-  const totalAllocated = budgets.reduce(
-    (sum, budget) => sum + budget.allocated,
-    0
-  );
-  const totalSpent = budgets.reduce((sum, budget) => sum + budget.spent, 0);
-  const totalRemaining = totalAllocated - totalSpent;
 
   return {
     deleteBudgetOpen,
@@ -126,9 +147,10 @@ const useBudgets = () => {
     setBudgets,
     isBudgetDialogOpen,
     setIsBudgetDialogOpen,
-    totalAllocated,
-    totalSpent,
-    totalRemaining,
+    availableCategories,
+    totals,
+    isLoading,
+    createBudget,
     getStatusColor,
     getProgressColor,
     handleCreateBudget,
