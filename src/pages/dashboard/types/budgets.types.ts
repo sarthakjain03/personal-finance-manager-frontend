@@ -11,8 +11,17 @@ export interface AddEditBudgetDialogProps {
   open: boolean;
   onOpenChange: (open: string) => void;
   budget: Budget | null | undefined;
-  onEditSave: (budgetId: string, updatedBudget: Partial<Budget>) => void;
-  onNewSave: (budget: { category: string; budgetAmount: number }) => void;
+  handleSave: ({
+    category,
+    budgetAmount,
+    reqType,
+    budgetId,
+  }: {
+    category: string;
+    budgetAmount: number;
+    reqType: "new" | "edit";
+    budgetId?: string;
+  }) => Promise<boolean>;
   action: string;
   availableCategories: string[];
 }

@@ -37,8 +37,7 @@ const AddEditBudgetDialog = ({
   open,
   onOpenChange,
   budget,
-  onNewSave,
-  onEditSave,
+  handleSave,
   action,
   availableCategories,
 }: AddEditBudgetDialogProps) => {
@@ -58,20 +57,17 @@ const AddEditBudgetDialog = ({
     setBudgetAmount("");
   };
 
-  const handleSave = () => {
+  const handleSaveClick = async () => {
     if (category && budgetAmount) {
-      if (action === "Create") {
-        onNewSave({
-          category,
-          budgetAmount: parseFloat(budgetAmount),
-        });
-      } else if (budget?._id) {
-        onEditSave(budget?._id, {
-          category,
-          budgetAmount: parseFloat(budgetAmount),
-        });
+      const success = await handleSave({
+        category,
+        budgetAmount: parseFloat(budgetAmount),
+        reqType: action === "Create" ? "new" : "edit",
+        budgetId: budget?._id,
+      });
+      if (success) {
+        handleReset();
       }
-      handleReset();
     }
   };
 
@@ -136,7 +132,7 @@ const AddEditBudgetDialog = ({
           >
             Cancel
           </Button>
-          <Button onClick={handleSave} className="cursor-pointer">
+          <Button onClick={handleSaveClick} className="cursor-pointer">
             Save Budget
           </Button>
         </DialogFooter>

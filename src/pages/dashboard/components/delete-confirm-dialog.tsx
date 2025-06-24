@@ -17,10 +17,16 @@ interface DeleteDialogProps {
   onConfirm: () => void;
 }
 
-const DeleteConfirmDialog = ({ open, onOpenChange, title, description, onConfirm }: DeleteDialogProps) => {
+const DeleteConfirmDialog = ({
+  open,
+  onOpenChange,
+  title,
+  description,
+  onConfirm,
+}: DeleteDialogProps) => {
   const handleConfirm = () => {
     onConfirm();
-    onOpenChange(false);
+    // onOpenChange(false);
   };
 
   return (
@@ -29,12 +35,18 @@ const DeleteConfirmDialog = ({ open, onOpenChange, title, description, onConfirm
         <AlertDialogHeader>
           <AlertDialogTitle>Delete {title}?</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete "{description}"? This action cannot be undone.
+            Are you sure you want to delete "{description}"? This action cannot
+            be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm} className="bg-red-600 hover:bg-red-700 cursor-pointer">
+          <AlertDialogCancel className="cursor-pointer">
+            Cancel
+          </AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleConfirm}
+            className="bg-red-600 hover:bg-red-700 cursor-pointer"
+          >
             Delete
           </AlertDialogAction>
         </AlertDialogFooter>

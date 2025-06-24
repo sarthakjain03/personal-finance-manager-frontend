@@ -3,7 +3,8 @@ import { Budget } from "../types/budgets.types";
 import { Categories } from "@/lib/constants/categories";
 import { toast } from "sonner";
 import getAllBudgets from "../apis/budget/get-all-budgets";
-import addNewBudget from "../apis/budget/add-new-budget";
+import addOrEditBudget from "../apis/budget/add-edit-budget";
+import deleteBudget from "../apis/budget/delete-budget";
 
 const useBudgets = () => {
   const [budgets, setBudgets] = useState<Budget[]>([]);
@@ -41,36 +42,90 @@ const useBudgets = () => {
     setIsLoading(false);
   };
 
-  const createBudget = async (budget: {
+  const createOrEditBudget = async (budget: {
     category: string;
     budgetAmount: number;
+    reqType: "new" | "edit";
+    budgetId?: string;
   }) => {
     setIsLoading(true);
     try {
-      const response = await addNewBudget({
+      const response = await addOrEditBudget({
         category: budget.category,
         budgetAmount: budget.budgetAmount,
+        reqType: budget.reqType,
+        budgetId: budget.budgetId,
       });
       if (response?.success && response?.data) {
-        setBudgets((prev) => {
-          if (response?.data?.budget) {
-            return [...prev, response?.data?.budget];
-          }
-          return prev;
-        });
+        if (budget.reqType === "new") {
+          setBudgets((prev) => {
+            if (response?.data?.budget) {
+              return [...prev, response?.data?.budget];
+            }
+            return prev;
+          });
+        } else {
+          setBudgets((prev) => {
+            if (response?.data?.budget) {
+              return prev.map((budget) =>
+                budget._id === response?.data?.budget._id
+                  ? {
+                      ...budget,
+                      category: response?.data?.budget.category,
+                      budgetAmount: response?.data?.budget.budgetAmount,
+                      remainingAmount:
+                        response?.data?.budget.budgetAmount -
+                        response?.data?.budget.spentAmount,
+                      spentPercentage: response?.data?.budget.spentPercentage,
+                    }
+                  : budget
+              );
+            }
+            return prev;
+          });
+        }
         setTotals({
           totalAllocated: response?.data.totalBudget,
           totalSpent: response?.data.totalSpent,
           totalRemaining: response?.data.totalRemaining,
           totalSpentPercentage: response?.data.totalSpentPercentage,
         });
+        setIsBudgetDialogOpen("");
         toast.success(response?.message);
+        setIsLoading(false);
+        return true;
       } else {
         toast.error(response?.message);
       }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong while adding budget");
+    }
+    setIsLoading(false);
+    return false;
+  };
+
+  const deleteBudgetFromId = async (budgetId: string) => {
+    setIsLoading(true);
+    try {
+      const response = await deleteBudget(budgetId);
+      if (response?.success && response?.data) {
+        setBudgets((prev) => prev.filter((budget) => budget._id !== budgetId));
+        setTotals({
+          totalAllocated: response?.data.totalBudget,
+          totalSpent: response?.data.totalSpent,
+          totalRemaining: response?.data.totalRemaining,
+          totalSpentPercentage: response?.data.totalSpentPercentage,
+        });
+        setSelectedBudget(null);
+        toast.success(response?.message);
+        setDeleteBudgetOpen(false);
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while deleting budget");
     }
     setIsLoading(false);
   };
@@ -131,13 +186,6 @@ const useBudgets = () => {
     setDeleteBudgetOpen(true);
   };
 
-  const handleConfirmDelete = () => {
-    if (selectedBudget) {
-      setBudgets(budgets.filter((budget) => budget._id !== selectedBudget._id));
-      setSelectedBudget(null);
-    }
-  };
-
   return {
     deleteBudgetOpen,
     setDeleteBudgetOpen,
@@ -150,14 +198,14 @@ const useBudgets = () => {
     availableCategories,
     totals,
     isLoading,
-    createBudget,
+    createOrEditBudget,
+    deleteBudgetFromId,
     getStatusColor,
     getProgressColor,
     handleCreateBudget,
     handleEditBudget,
     handleSaveEditBudget,
     handleDeleteBudget,
-    handleConfirmDelete,
   };
 };
 

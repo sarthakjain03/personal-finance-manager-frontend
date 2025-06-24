@@ -33,7 +33,8 @@ const BudgetsView = () => {
     handleEditBudget,
     handleCreateBudget,
     budgets,
-    createBudget,
+    createOrEditBudget,
+    deleteBudgetFromId,
     selectedBudget,
     getStatusColor,
     isBudgetDialogOpen,
@@ -224,20 +225,19 @@ const BudgetsView = () => {
           open={isBudgetDialogOpen !== ""}
           onOpenChange={setIsBudgetDialogOpen}
           budget={selectedBudget}
-          onNewSave={createBudget}
-          onEditSave={() => {}}
+          handleSave={createOrEditBudget}
           availableCategories={availableCategories}
           action={isBudgetDialogOpen === "new" ? "Create" : "Edit"}
         />
       )}
 
-      {deleteBudgetOpen && (
+      {deleteBudgetOpen && selectedBudget && (
         <DeleteConfirmDialog
           open={deleteBudgetOpen}
           onOpenChange={setDeleteBudgetOpen}
           title={"Budget"}
           description={selectedBudget?.category || ""}
-          onConfirm={() => {}}
+          onConfirm={() => deleteBudgetFromId(selectedBudget._id)}
         />
       )}
     </div>
