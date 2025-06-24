@@ -2,23 +2,35 @@ export interface Goal {
   id: string;
   title: string;
   description: string;
-  current: number;
-  target: number;
+  currentAmount: number;
+  targetAmount: number;
   category: string;
-  deadline: string;
+  deadline: Date;
 }
 
 export interface AddEditGoalDialogProps {
   open: boolean;
   onOpenChange: (open: string) => void;
-  onEditSave: (goalId: string, updatedGoal: Partial<Goal>) => void;
-  onNewSave: (goal: {
+  handleSave: ({
+    title,
+    description,
+    currentAmount,
+    targetAmount,
+    category,
+    deadline,
+    reqType,
+    goalId,
+  }: {
+    reqType: "new" | "edit";
+    goalId?: string;
     title: string;
     description: string;
-    target: number;
+    currentAmount: number;
+    targetAmount: number;
     category: string;
-    deadline: string;
-  }) => void;
+    deadline: Date;
+  }) => Promise<boolean>;
   goal?: Goal | null | undefined;
   action: string;
+  availableCategories: string[];
 }

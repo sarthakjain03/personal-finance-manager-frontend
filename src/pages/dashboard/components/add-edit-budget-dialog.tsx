@@ -20,19 +20,6 @@ import {
 import { AddEditBudgetDialogProps } from "../types/budgets.types";
 import { CategoryIcons } from "@/lib/constants/categories";
 
-const categoryOptions = [
-  { value: "Food & Dining", icon: "🍽️" },
-  { value: "Transportation", icon: "🚗" },
-  { value: "Entertainment", icon: "🎬" },
-  { value: "Shopping", icon: "🛍️" },
-  { value: "Bills & Utilities", icon: "💡" },
-  { value: "Health & Fitness", icon: "💪" },
-  { value: "Travel", icon: "✈️" },
-  { value: "Education", icon: "📚" },
-  { value: "Housing", icon: "🏠" },
-  { value: "Personal Care", icon: "💄" },
-];
-
 const AddEditBudgetDialog = ({
   open,
   onOpenChange,

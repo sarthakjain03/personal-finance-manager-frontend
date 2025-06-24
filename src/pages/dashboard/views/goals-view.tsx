@@ -24,6 +24,7 @@ import {
 import AddEditGoalDialog from "../components/add-edit-goal-dialog";
 import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 import useGoals from "../hooks/use-goals";
+import { format } from "date-fns";
 
 const GoalsView = () => {
   const {
@@ -37,6 +38,10 @@ const GoalsView = () => {
     openDeleteDialog,
     getCategoryColor,
     getProgressColor,
+    isLoading,
+    createOrEditGoal,
+    deleteGoalFromId,
+    availableCategories,
   } = useGoals();
 
   return (
@@ -61,7 +66,7 @@ const GoalsView = () => {
       {/* Goals Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {goals?.map((goal) => {
-          const progress = (goal.current / goal.target) * 100;
+          const progress = (goal.currentAmount / goal.targetAmount) * 100;
           return (
             <Card key={goal.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
@@ -110,10 +115,10 @@ const GoalsView = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-2xl font-bold text-gray-900">
-                      ${goal.current.toLocaleString()}
+                      {goal.currentAmount.toLocaleString()}
                     </p>
                     <p className="text-sm text-gray-600">
-                      of ${goal.target.toLocaleString()}
+                      of ${goal.targetAmount.toLocaleString()}
                     </p>
                   </div>
                   <div className="text-right">
@@ -134,10 +139,15 @@ const GoalsView = () => {
                   <div className="flex items-center gap-1 text-green-600">
                     <TrendingUp className="w-3 h-3" />
                     <span>
-                      ${(goal.target - goal.current).toLocaleString()} to go
+                      {(
+                        goal.targetAmount - goal.currentAmount
+                      ).toLocaleString()}{" "}
+                      to go
                     </span>
                   </div>
-                  <span className="text-gray-500">Due: {goal.deadline}</span>
+                  <span className="text-gray-500">
+                    Due: {format(goal.deadline, "dd MMM yyyy")}
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -150,20 +160,20 @@ const GoalsView = () => {
         <AddEditGoalDialog
           open={goalDialogOpen !== ""}
           onOpenChange={setGoalDialogOpen}
-          onEditSave={() => {}}
-          onNewSave={() => {}}
+          handleSave={createOrEditGoal}
           goal={goalDialogOpen === "edit" ? selectedGoal : null}
           action={goalDialogOpen === "edit" ? "Edit" : "Create New"}
+          availableCategories={availableCategories}
         />
       )}
 
-      {deleteGoalOpen && (
+      {deleteGoalOpen && selectedGoal && (
         <DeleteConfirmDialog
           open={deleteGoalOpen}
           onOpenChange={setDeleteGoalOpen}
           title="Goal"
           description={selectedGoal?.title || ""}
-          onConfirm={() => {}}
+          onConfirm={() => deleteGoalFromId(selectedGoal.id)}
         />
       )}
     </div>
