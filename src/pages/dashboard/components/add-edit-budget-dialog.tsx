@@ -63,7 +63,7 @@ const AddEditBudgetDialog = ({
         category,
         budgetAmount: parseFloat(budgetAmount),
         reqType: action === "Create" ? "new" : "edit",
-        budgetId: budget?._id,
+        budgetId: budget?.id,
       });
       if (success) {
         handleReset();

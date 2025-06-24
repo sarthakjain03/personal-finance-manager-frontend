@@ -68,7 +68,7 @@ const useBudgets = () => {
           setBudgets((prev) => {
             if (response?.data?.budget) {
               return prev.map((budget) =>
-                budget._id === response?.data?.budget._id
+                budget.id === response?.data?.budget.id
                   ? {
                       ...budget,
                       category: response?.data?.budget.category,
@@ -110,7 +110,7 @@ const useBudgets = () => {
     try {
       const response = await deleteBudget(budgetId);
       if (response?.success && response?.data) {
-        setBudgets((prev) => prev.filter((budget) => budget._id !== budgetId));
+        setBudgets((prev) => prev.filter((budget) => budget.id !== budgetId));
         setTotals({
           totalAllocated: response?.data.totalBudget,
           totalSpent: response?.data.totalSpent,
@@ -169,7 +169,7 @@ const useBudgets = () => {
   const handleSaveEditBudget = (updatedBudget: Budget) => {
     setBudgets(
       budgets.map((budget) =>
-        budget._id === updatedBudget._id
+        budget.id === updatedBudget.id
           ? {
               ...budget,
               category: updatedBudget.category,

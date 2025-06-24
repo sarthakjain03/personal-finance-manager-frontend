@@ -119,10 +119,7 @@ const BudgetsView = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {budgets.map((budget) => {
           return (
-            <Card
-              key={budget._id}
-              className="hover:shadow-lg transition-shadow"
-            >
+            <Card key={budget.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
@@ -237,7 +234,7 @@ const BudgetsView = () => {
           onOpenChange={setDeleteBudgetOpen}
           title={"Budget"}
           description={selectedBudget?.category || ""}
-          onConfirm={() => deleteBudgetFromId(selectedBudget._id)}
+          onConfirm={() => deleteBudgetFromId(selectedBudget.id)}
         />
       )}
     </div>

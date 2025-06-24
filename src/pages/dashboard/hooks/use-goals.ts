@@ -2,45 +2,8 @@ import { useEffect, useState } from "react";
 import { Goal } from "../types/goals.types";
 
 const useGoals = () => {
-  const [goals, setGoals] = useState<Goal[]>([
-    {
-      id: "1",
-      title: "Emergency Fund",
-      description: "Build a 6-month emergency fund",
-      current: 8200,
-      target: 15000,
-      category: "Savings",
-      deadline: "Dec 2025",
-    },
-    {
-      id: "2",
-      title: "Vacation to Europe",
-      description: "Save for a 2-week European vacation",
-      current: 3500,
-      target: 8000,
-      category: "Travel",
-      deadline: "Jun 2025",
-    },
-    {
-      id: "3",
-      title: "New Car",
-      description: "Save for a reliable used car",
-      current: 12000,
-      target: 20000,
-      category: "Transportation",
-      deadline: "Aug 2025",
-    },
-    {
-      id: "4",
-      title: "Home Down Payment",
-      description: "Save for a house down payment",
-      current: 25000,
-      target: 60000,
-      category: "Housing",
-      deadline: "Dec 2026",
-    },
-  ]);
-
+  const [isLoading, setIsLoading] = useState(false);
+  const [goals, setGoals] = useState<Goal[]>([]);
   const [deleteGoalOpen, setDeleteGoalOpen] = useState(false);
   const [goalDialogOpen, setGoalDialogOpen] = useState("");
   const [selectedGoal, setSelectedGoal] = useState<Goal | null>(null);
@@ -84,6 +47,7 @@ const useGoals = () => {
     openDeleteDialog,
     getCategoryColor,
     getProgressColor,
+    isLoading,
   };
 };
 
