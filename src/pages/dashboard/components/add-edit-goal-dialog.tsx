@@ -75,7 +75,7 @@ const AddEditGoalDialog = ({
         targetAmount: parseFloat(target),
         category,
         deadline,
-        reqType: action === "Create" ? "new" : "edit",
+        reqType: action === "Create New" ? "new" : "edit",
         goalId: goal?.id,
       });
       if (success) {

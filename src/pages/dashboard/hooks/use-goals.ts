@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Goal } from "../types/goals.types";
 import { Categories } from "@/lib/constants/categories";
 import { toast } from "sonner";
+import getAllGoals from "../apis/goal/get-all-goals";
+import deleteGoal from "../apis/goal/delete-goal";
+import addOrEditGoal from "../apis/goal/add-edit-goal";
 
 const useGoals = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,12 +29,12 @@ const useGoals = () => {
   const fetchAllGoals = async () => {
     setIsLoading(true);
     try {
-      // const response = await getAllBudgets();
-      // if (response?.success && response?.data) {
-      //   setGoals(response?.data.data);
-      // } else {
-      //   toast.error(response?.message);
-      // }
+      const response = await getAllGoals();
+      if (response?.success && response?.data) {
+        setGoals(response?.data);
+      } else {
+        toast.error(response?.message);
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
@@ -51,51 +54,46 @@ const useGoals = () => {
   }) => {
     setIsLoading(true);
     try {
-      // const response = await addOrEditGoal({
-      //   category: goal.category,
-      //   title: goal.title,
-      //   description: goal.description,
-      //   currentAmount: goal.currentAmount,
-      //   targetAmount: goal.targetAmount,
-      //   deadline: goal.deadline,
-      //   reqType: goal.reqType,
-      //   goalId: goal.goalId,
-      // });
-      // if (response?.success && response?.data) {
-      //   if (goal.reqType === "new") {
-      //     setGoals((prev) => {
-      //       if (response?.data?.goal) {
-      //         return [...prev, response?.data?.goal];
-      //       }
-      //       return prev;
-      //     });
-      //   } else {
-      //     setGoals((prev) => {
-      //       if (response?.data?.goal) {
-      //         return prev.map((goal) =>
-      //           goal.id === response?.data?.goal.id
-      //             ? {
-      //                 ...goal,
-      //                 category: response?.data?.goal.category,
-      //                 budgetAmount: response?.data?.goal.budgetAmount,
-      //                 remainingAmount:
-      //                   response?.data?.goal.budgetAmount -
-      //                   response?.data?.goal.spentAmount,
-      //                 spentPercentage: response?.data?.goal.spentPercentage,
-      //               }
-      //             : goal
-      //         );
-      //       }
-      //       return prev;
-      //     });
-      //   }
-      //   setGoalDialogOpen("");
-      //   toast.success(response?.message);
-      //   setIsLoading(false);
-      //   return true;
-      // } else {
-      //   toast.error(response?.message);
-      // }
+      const response = await addOrEditGoal({
+        category: goal.category,
+        title: goal.title,
+        description: goal.description,
+        currentAmount: goal.currentAmount,
+        targetAmount: goal.targetAmount,
+        deadline: goal.deadline,
+        reqType: goal.reqType,
+        goalId: goal.goalId,
+      });
+      if (response?.success && response?.data) {
+        if (goal.reqType === "new") {
+          setGoals((prev) => {
+            if (response?.data) {
+              return [...prev, response?.data];
+            }
+            return prev;
+          });
+        } else {
+          setGoals((prev) => {
+            if (response?.data) {
+              return prev.map((goal) =>
+                goal.id === response?.data?.id
+                  ? {
+                      ...goal,
+                      ...response?.data,
+                    }
+                  : goal
+              );
+            }
+            return prev;
+          });
+        }
+        setGoalDialogOpen("");
+        toast.success(response?.message);
+        setIsLoading(false);
+        return true;
+      } else {
+        toast.error(response?.message);
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong while adding goal");
@@ -107,15 +105,15 @@ const useGoals = () => {
   const deleteGoalFromId = async (goalId: string) => {
     setIsLoading(true);
     try {
-      // const response = await deleteGoal(goalId);
-      // if (response?.success && response?.data) {
-      //   setGoals((prev) => prev.filter((goal) => goal.id !== goalId));
-      //   setSelectedGoal(null);
-      //   toast.success(response?.message);
-      //   setDeleteGoalOpen(false);
-      // } else {
-      //   toast.error(response?.message);
-      // }
+      const response = await deleteGoal(goalId);
+      if (response?.success) {
+        setGoals((prev) => prev.filter((goal) => goal.id !== goalId));
+        setSelectedGoal(null);
+        toast.success(response?.message);
+        setDeleteGoalOpen(false);
+      } else {
+        toast.error(response?.message);
+      }
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong while deleting budget");
