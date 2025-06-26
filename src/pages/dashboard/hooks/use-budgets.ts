@@ -99,7 +99,7 @@ const useBudgets = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong while adding budget");
+      toast.error("Something went wrong while saving budget");
     }
     setIsLoading(false);
     return false;

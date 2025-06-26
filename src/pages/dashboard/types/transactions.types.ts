@@ -1,10 +1,9 @@
 export interface Transaction {
   id: string;
-  date: string;
+  date: Date;
   description: string;
-  merchant: string;
   category: string;
-  type: string;
+  transactionType: string;
   amount: number;
 }
 
@@ -12,13 +11,23 @@ export interface AddEditTransactionDialogProps {
   open: boolean;
   onOpenChange: (open: string) => void;
   transaction: Transaction | null | undefined;
-  onEditSave: (txnId: string, updatedTxn: Partial<Transaction>) => void;
-  onNewSave: (transaction: {
+  handleSave: ({
+    description,
+    category,
+    transactionType,
+    amount,
+    date,
+    txnId,
+    reqType,
+  }: {
     description: string;
     category: string;
-    type: string;
+    transactionType: string;
     amount: number;
-    date: string;
-  }) => void;
+    date: Date;
+    txnId?: string;
+    reqType: "new" | "edit";
+  }) => Promise<boolean>;
+  availableCategories: string[];
   action: string;
 }

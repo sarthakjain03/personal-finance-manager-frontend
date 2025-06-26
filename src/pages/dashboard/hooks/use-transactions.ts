@@ -1,63 +1,10 @@
 import { useEffect, useState } from "react";
 import { Transaction } from "../types/transactions.types";
 import { TransactionColumns } from "../components/transactions-table";
+import { toast } from "sonner";
+import getAllTransactions from "../apis/transactions/get-all-transactions";
 
-const initialTransactions: Transaction[] = [
-  {
-    id: "1",
-    description: "Grocery Shopping",
-    amount: -85.5,
-    category: "Food & Dining",
-    date: "2025-01-20",
-    merchant: "Whole Foods",
-    type: "expense",
-  },
-  {
-    id: "2",
-    description: "Salary",
-    amount: 5200.0,
-    category: "Income",
-    date: "2025-01-18",
-    merchant: "Acme Corp",
-    type: "income",
-  },
-  {
-    id: "3",
-    description: "Gas",
-    amount: -45.2,
-    category: "Transportation",
-    date: "2025-01-19",
-    merchant: "Shell",
-    type: "expense",
-  },
-  {
-    id: "4",
-    description: "Netflix Subscription",
-    amount: -15.99,
-    category: "Entertainment",
-    date: "2025-01-18",
-    merchant: "Netflix",
-    type: "expense",
-  },
-  {
-    id: "5",
-    description: "Clothes Shopping",
-    amount: -129.99,
-    category: "Shopping",
-    date: "2025-01-17",
-    merchant: "Zara",
-    type: "expense",
-  },
-  {
-    id: "6",
-    description: "Interest Earned",
-    amount: 2.5,
-    category: "Income",
-    date: "2025-01-14",
-    merchant: "Bank",
-    type: "income",
-  },
-];
+const limit = 20;
 
 const useTransactions = () => {
   const [search, setSearch] = useState("");
@@ -68,39 +15,107 @@ const useTransactions = () => {
     from: undefined,
     to: undefined,
   });
-  const [transactions, setTransactions] =
-    useState<Transaction[]>(initialTransactions);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState("");
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
   const [deleteTransactionOpen, setDeleteTransactionOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true);
+  const [availableCategories, setAvailableCategories] = useState<string[]>([]);
+
+  const fetchTransactions = async () => {
+    setIsLoading(true);
+    try {
+      const response = await getAllTransactions({
+        limit,
+        page,
+      });
+      if (response?.success && response?.data) {
+        setTransactions((prev) => [...prev, ...(response?.data ?? [])]);
+        if (response?.data.length < limit) {
+          setHasMoreData(false);
+        }
+      } else {
+        toast.error(response?.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong");
+    }
+    setIsLoading(false);
+  };
+
+  const createOrEditTransaction = async (transaction: {
+    description: string;
+    category: string;
+    transactionType: string;
+    amount: number;
+    date: Date;
+    txnId?: string;
+    reqType: "new" | "edit";
+  }) => {
+    setIsLoading(true);
+    try {
+      const response = true;
+      return true;
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while saving goal");
+    }
+    setIsLoading(false);
+    return false;
+  };
+
+  const deleteTransactionFromId = async (txnId: string) => {
+    setIsLoading(true);
+    try {
+      // const response = await deleteGoal(txnId);
+      // if (response?.success) {
+      //   setTransactions((prev) => prev.filter((txn) => txn.id !== txnId));
+      //   setSelectedTransaction(null);
+      //   toast.success(response?.message);
+      //   setDeleteTransactionOpen(false);
+      // } else {
+      //   toast.error(response?.message);
+      // }
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong while deleting transaction");
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    if (hasMoreData) {
+      fetchTransactions();
+    }
+  }, [page]);
 
   useEffect(() => {
     // Filter transactions:
-    const filteredTransactions: Transaction[] = initialTransactions?.filter(
-      (tx) => {
-        // Search filter:
-        const matchesSearch =
-          search?.length === 0 ||
-          tx.description?.toLowerCase().includes(search.toLowerCase()) ||
-          tx.merchant?.toLowerCase().includes(search.toLowerCase());
+    const filteredTransactions: Transaction[] = transactions?.filter((tx) => {
+      // Search filter:
+      const matchesSearch =
+        search?.length === 0 ||
+        tx.description?.toLowerCase().includes(search.toLowerCase());
 
-        // Date range filter:
-        let matchesDate = true;
-        const txDate = new Date(tx.date);
-        if (dateRange?.from && dateRange?.to) {
-          const endDate = new Date(dateRange?.to?.setHours(23, 59, 59, 59));
-          matchesDate = txDate >= dateRange?.from && txDate <= endDate;
-        } else if (dateRange?.from) {
-          matchesDate = txDate >= dateRange?.from;
-        } else if (dateRange?.to) {
-          const endDate = new Date(dateRange?.to?.setHours(23, 59, 59, 59));
-          matchesDate = txDate <= endDate;
-        }
-
-        return matchesSearch && matchesDate;
+      // Date range filter:
+      let matchesDate = true;
+      const txDate = new Date(tx.date);
+      if (dateRange?.from && dateRange?.to) {
+        const endDate = new Date(dateRange?.to?.setHours(23, 59, 59, 59));
+        matchesDate = txDate >= dateRange?.from && txDate <= endDate;
+      } else if (dateRange?.from) {
+        matchesDate = txDate >= dateRange?.from;
+      } else if (dateRange?.to) {
+        const endDate = new Date(dateRange?.to?.setHours(23, 59, 59, 59));
+        matchesDate = txDate <= endDate;
       }
-    );
+
+      return matchesSearch && matchesDate;
+    });
     setTransactions(filteredTransactions);
   }, [dateRange, search]);
 
@@ -121,7 +136,6 @@ const useTransactions = () => {
     transactions,
     setIsTransactionDialogOpen,
     isTransactionDialogOpen,
-    setSelectedTransaction,
     selectedTransaction,
     tableColumns: TransactionColumns({
       handleEdit: handleEditTransaction,
@@ -129,6 +143,13 @@ const useTransactions = () => {
     }),
     setDeleteTransactionOpen,
     deleteTransactionOpen,
+    createOrEditTransaction,
+    availableCategories,
+    isLoading,
+    hasMoreData,
+    page,
+    setPage,
+    deleteTransactionFromId,
   };
 };
 

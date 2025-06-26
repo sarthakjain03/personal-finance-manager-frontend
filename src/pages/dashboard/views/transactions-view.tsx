@@ -32,11 +32,17 @@ const TransactionsView = () => {
     transactions,
     setIsTransactionDialogOpen,
     isTransactionDialogOpen,
-    setSelectedTransaction,
     selectedTransaction,
     tableColumns,
     setDeleteTransactionOpen,
     deleteTransactionOpen,
+    isLoading,
+    createOrEditTransaction,
+    hasMoreData,
+    availableCategories,
+    page,
+    setPage,
+    deleteTransactionFromId,
   } = useTransactions();
 
   return (
@@ -135,19 +141,19 @@ const TransactionsView = () => {
           open={isTransactionDialogOpen !== ""}
           transaction={selectedTransaction}
           onOpenChange={setIsTransactionDialogOpen}
-          onNewSave={() => {}}
-          onEditSave={() => {}}
           action={isTransactionDialogOpen === "new" ? "New" : "Edit"}
+          handleSave={createOrEditTransaction}
+          availableCategories={availableCategories}
         />
       )}
 
-      {deleteTransactionOpen && (
+      {deleteTransactionOpen && selectedTransaction && (
         <DeleteConfirmDialog
           open={deleteTransactionOpen}
           onOpenChange={setDeleteTransactionOpen}
           title={"Transaction"}
           description={selectedTransaction?.description || ""}
-          onConfirm={() => {}}
+          onConfirm={() => deleteTransactionFromId(selectedTransaction?.id)}
         />
       )}
     </div>

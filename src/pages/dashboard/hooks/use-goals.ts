@@ -96,7 +96,7 @@ const useGoals = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong while adding goal");
+      toast.error("Something went wrong while saving goal");
     }
     setIsLoading(false);
     return false;
@@ -116,7 +116,7 @@ const useGoals = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong while deleting budget");
+      toast.error("Something went wrong while deleting goal");
     }
     setIsLoading(false);
   };

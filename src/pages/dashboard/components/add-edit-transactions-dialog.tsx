@@ -27,28 +27,15 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AddEditTransactionDialogProps } from "../types/transactions.types";
-
-const categories = [
-  "Food & Dining",
-  "Transportation",
-  "Entertainment",
-  "Income",
-  "Shopping",
-  "Bills & Utilities",
-  "Health & Fitness",
-  "Travel",
-  "Education",
-  "Housing",
-  "Personal Care",
-];
+import { CategoryIcons } from "@/lib/constants/categories";
 
 const AddEditTransactionDialog = ({
   open,
   onOpenChange,
-  onNewSave,
-  onEditSave,
+  handleSave,
   transaction,
   action,
+  availableCategories,
 }: AddEditTransactionDialogProps) => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -58,13 +45,13 @@ const AddEditTransactionDialog = ({
 
   useEffect(() => {
     if (action === "Edit" && transaction) {
-        setDescription(transaction.description);
-        setCategory(transaction.category);
-        setType(transaction.type);
-        setAmount(transaction.amount.toString());
-        setDate(new Date(transaction.date));
+      setDescription(transaction.description);
+      setCategory(transaction.category);
+      setType(transaction.transactionType);
+      setAmount(transaction.amount.toString());
+      setDate(new Date(transaction.date));
     }
-  }, [transaction])
+  }, [transaction]);
 
   const handleReset = () => {
     onOpenChange("");
@@ -73,34 +60,22 @@ const AddEditTransactionDialog = ({
     setType("");
     setAmount("");
     setDate(new Date());
-  }
+  };
 
-  const handleSave = () => {
+  const handleSaveClick = async () => {
     if (description && category && type && amount && date) {
-      if (action === "New") {
-        onNewSave({
-          description,
-          category,
-          type,
-          amount:
-            type === "expense"
-              ? -Math.abs(parseFloat(amount))
-              : Math.abs(parseFloat(amount)),
-          date: format(date, "yyyy-MM-dd"),
-        });
-      } else if (transaction?.id) {
-        onEditSave(transaction?.id, {
-          description,
-          category,
-          type,
-          amount:
-            type === "expense"
-              ? -Math.abs(parseFloat(amount))
-              : Math.abs(parseFloat(amount)),
-          date: format(date, "yyyy-MM-dd"),
-        });
+      const success = await handleSave({
+        description,
+        category,
+        transactionType: type,
+        amount: parseFloat(amount),
+        date,
+        txnId: transaction?.id,
+        reqType: action === "New" ? "new" : "edit",
+      });
+      if (success) {
+        handleReset();
       }
-      handleReset();
     }
   };
 
@@ -136,11 +111,25 @@ const AddEditTransactionDialog = ({
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                {categories.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    {cat}
-                  </SelectItem>
-                ))}
+                {transaction
+                  ? [...availableCategories, transaction.category]?.map(
+                      (cat) => (
+                        <SelectItem key={cat} value={cat}>
+                          <div className="flex items-center gap-2">
+                            <span>{CategoryIcons[cat]}</span>
+                            <span>{cat}</span>
+                          </div>
+                        </SelectItem>
+                      )
+                    )
+                  : availableCategories?.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        <div className="flex items-center gap-2">
+                          <span>{CategoryIcons[cat]}</span>
+                          <span>{cat}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
               </SelectContent>
             </Select>
           </div>
@@ -206,7 +195,7 @@ const AddEditTransactionDialog = ({
           <Button variant="outline" onClick={() => handleReset()}>
             Cancel
           </Button>
-          <Button onClick={handleSave}>Save Transaction</Button>
+          <Button onClick={handleSaveClick}>Save Transaction</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
