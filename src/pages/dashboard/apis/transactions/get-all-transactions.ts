@@ -6,13 +6,37 @@ import { ApiResponseData } from "@/types/api-response";
 const getAllTransactions = async ({
   limit,
   page,
+  fromDate,
+  toDate,
+  search,
+  category,
+  type,
 }: {
   limit: number;
   page: number;
+  fromDate?: Date;
+  toDate?: Date;
+  search?: string;
+  category?: string;
+  type?: string;
 }): Promise<ApiResponseData<Transaction[]>> => {
   try {
-    const response = await axiosInstance.get<ApiResponseData<Transaction[]>>(
-      `/transaction/all?page=${page}&limit=${limit}`
+    const payload = {
+      page,
+      limit,
+      fromDate,
+      toDate,
+      search,
+      category,
+      type,
+    };
+
+    const response = await axiosInstance.post<ApiResponseData<Transaction[]>>(
+      `/transaction/all`,
+      payload,
+      {
+        withCredentials: true,
+      }
     );
 
     return response?.data;

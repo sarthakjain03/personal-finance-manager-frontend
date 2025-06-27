@@ -27,7 +27,7 @@ import { Calendar as CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AddEditTransactionDialogProps } from "../types/transactions.types";
-import { CategoryIcons } from "@/lib/constants/categories";
+import { Categories, CategoryIcons } from "@/lib/constants/categories";
 
 const AddEditTransactionDialog = ({
   open,
@@ -35,7 +35,6 @@ const AddEditTransactionDialog = ({
   handleSave,
   transaction,
   action,
-  availableCategories,
 }: AddEditTransactionDialogProps) => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
@@ -111,25 +110,14 @@ const AddEditTransactionDialog = ({
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                {transaction
-                  ? [...availableCategories, transaction.category]?.map(
-                      (cat) => (
-                        <SelectItem key={cat} value={cat}>
-                          <div className="flex items-center gap-2">
-                            <span>{CategoryIcons[cat]}</span>
-                            <span>{cat}</span>
-                          </div>
-                        </SelectItem>
-                      )
-                    )
-                  : availableCategories?.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        <div className="flex items-center gap-2">
-                          <span>{CategoryIcons[cat]}</span>
-                          <span>{cat}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
+                {Categories?.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    <div className="flex items-center gap-2">
+                      <span>{CategoryIcons[cat]}</span>
+                      <span>{cat}</span>
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

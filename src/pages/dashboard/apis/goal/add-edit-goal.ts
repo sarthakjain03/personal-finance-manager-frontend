@@ -1,7 +1,6 @@
 import { ApiResponseData } from "@/types/api-response";
 import { errorHandler } from "@/utils/error-handler";
 import axiosInstance from "@/utils/axios-client";
-import { Budget } from "../../types/budgets.types";
 import { Goal } from "../../types/goals.types";
 
 const addOrEditGoal = async ({

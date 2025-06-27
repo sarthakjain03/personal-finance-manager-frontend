@@ -22,12 +22,11 @@ export interface AddEditTransactionDialogProps {
   }: {
     description: string;
     category: string;
-    transactionType: string;
+    transactionType: "" | "Income" | "Expense";
     amount: number;
     date: Date;
     txnId?: string;
     reqType: "new" | "edit";
   }) => Promise<boolean>;
-  availableCategories: string[];
   action: string;
 }

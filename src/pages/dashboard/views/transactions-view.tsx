@@ -39,7 +39,6 @@ const TransactionsView = () => {
     isLoading,
     createOrEditTransaction,
     hasMoreData,
-    availableCategories,
     page,
     setPage,
     deleteTransactionFromId,
@@ -143,7 +142,6 @@ const TransactionsView = () => {
           onOpenChange={setIsTransactionDialogOpen}
           action={isTransactionDialogOpen === "new" ? "New" : "Edit"}
           handleSave={createOrEditTransaction}
-          availableCategories={availableCategories}
         />
       )}
 
