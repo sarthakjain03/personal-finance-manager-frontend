@@ -25,10 +25,6 @@ import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 const TransactionsView = () => {
   const { isMobile } = useResponsive();
   const {
-    setSearch,
-    search,
-    setDateRange,
-    dateRange,
     transactions,
     setIsTransactionDialogOpen,
     isTransactionDialogOpen,
@@ -42,6 +38,8 @@ const TransactionsView = () => {
     page,
     setPage,
     deleteTransactionFromId,
+    setFilters,
+    filters,
   } = useTransactions();
 
   return (
@@ -79,8 +77,10 @@ const TransactionsView = () => {
                 <Input
                   placeholder="Search..."
                   className="pl-10"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  value={filters?.search}
+                  onChange={(e) =>
+                    setFilters((prev) => ({ ...prev, search: e.target.value }))
+                  }
                   autoFocus={false}
                 />
               </div>
@@ -95,20 +95,23 @@ const TransactionsView = () => {
                       )}
                     >
                       <CalendarIcon className="h-4 w-4" />
-                      {dateRange?.from && dateRange?.to
-                        ? `${format(dateRange.from, "MMM d, yyyy")} - ${format(
-                            dateRange.to,
+                      {filters?.dateRange?.from && filters?.dateRange?.to
+                        ? `${format(
+                            filters?.dateRange.from,
                             "MMM d, yyyy"
-                          )}`
-                        : dateRange.from
-                        ? `${format(dateRange.from, "MMM d, yyyy")}`
+                          )} - ${format(filters?.dateRange.to, "MMM d, yyyy")}`
+                        : filters?.dateRange.from
+                        ? `${format(filters?.dateRange.from, "MMM d, yyyy")}`
                         : "Select Date Range"}
                     </Button>
-                    {dateRange?.from && dateRange?.to && (
+                    {filters?.dateRange?.from && filters?.dateRange?.to && (
                       <XCircle
                         className="h-4 w-4 cursor-pointer"
                         onClick={() =>
-                          setDateRange({ from: undefined, to: undefined })
+                          setFilters((prev) => ({
+                            ...prev,
+                            dateRange: { from: undefined, to: undefined },
+                          }))
                         }
                       />
                     )}
@@ -117,8 +120,13 @@ const TransactionsView = () => {
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
                     mode="range"
-                    selected={dateRange}
-                    onSelect={setDateRange as any}
+                    selected={filters?.dateRange}
+                    onSelect={(date) =>
+                      setFilters((prev) => ({
+                        ...prev,
+                        dateRange: { from: date?.from, to: date?.to },
+                      }))
+                    }
                     className={cn("p-3 pointer-events-auto")}
                     numberOfMonths={2}
                     initialFocus
@@ -129,13 +137,16 @@ const TransactionsView = () => {
             <TransactionsTable
               data={transactions || []}
               columns={tableColumns || []}
+              isLoading={isLoading}
+              hasMoreData={hasMoreData}
+              setPage={setPage}
             />
           </div>
         </CardContent>
       </Card>
 
       {/* Add/Edit Transaction Dialog */}
-      {isTransactionDialogOpen !== "" && selectedTransaction && (
+      {isTransactionDialogOpen !== "" && (
         <AddEditTransactionDialog
           open={isTransactionDialogOpen !== ""}
           transaction={selectedTransaction}

@@ -31,10 +31,6 @@ export const TransactionColumns: ({
     header: "Description",
   },
   {
-    accessorKey: "merchant",
-    header: "Merchant",
-  },
-  {
     accessorKey: "category",
     header: "Category",
   },
@@ -43,21 +39,22 @@ export const TransactionColumns: ({
     header: () => <div className="text-right">Amount</div>,
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
+      const txnType = row.original.transactionType;
       const formatted = new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: "USD",
+        currency: "INR",
       }).format(amount);
 
       return (
         <div className="text-right font-medium">
           <span
             className={
-              amount < 0
+              txnType === "Expense"
                 ? "text-red-600 font-semibold"
                 : "text-green-700 font-semibold"
             }
           >
-            {formatted}
+            {formatted?.split("₹")?.[1]}
           </span>
         </div>
       );
@@ -92,11 +89,17 @@ export const TransactionColumns: ({
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  isLoading: boolean;
+  hasMoreData: boolean;
+  setPage: (page: number) => void;
 }
 
 function DataTable<TData, TValue>({
   columns,
   data,
+  isLoading,
+  hasMoreData,
+  setPage,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -155,11 +158,25 @@ function DataTable<TData, TValue>({
 const TransactionsTable = ({
   data = [],
   columns,
+  isLoading,
+  hasMoreData,
+  setPage,
 }: {
   data: Transaction[];
   columns: ColumnDef<Transaction>[];
+  isLoading: boolean;
+  hasMoreData: boolean;
+  setPage: (page: number) => void;
 }) => {
-  return <DataTable columns={columns} data={data} />;
+  return (
+    <DataTable
+      columns={columns}
+      data={data}
+      isLoading={isLoading}
+      hasMoreData={hasMoreData}
+      setPage={setPage}
+    />
+  );
 };
 
 export default TransactionsTable;

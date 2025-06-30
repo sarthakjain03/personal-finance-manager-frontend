@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Transaction } from "../types/transactions.types";
 import { TransactionColumns } from "../components/transactions-table";
 import { toast } from "sonner";
@@ -18,14 +18,6 @@ const limit = 20;
 
 const useTransactions = () => {
   const { setUser, user } = useUserStore();
-  const [search, setSearch] = useState("");
-  const [dateRange, setDateRange] = useState<{
-    from: Date | undefined;
-    to: Date | undefined;
-  }>({
-    from: undefined,
-    to: undefined,
-  });
   const [filters, setFilters] = useState<Filters>({
     category: "",
     type: "",
@@ -46,15 +38,21 @@ const useTransactions = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchTransactions = async () => {
     setIsLoading(true);
     try {
+      let payloadToDate: Date | undefined = undefined;
+      if (debouncedFilters.dateRange.to) {
+        payloadToDate = new Date(debouncedFilters.dateRange.to);
+        payloadToDate.setDate(payloadToDate.getDate() + 1);
+      }
       const response = await getAllTransactions({
         limit,
         page,
         fromDate: debouncedFilters.dateRange.from,
-        toDate: debouncedFilters.dateRange.to,
+        toDate: payloadToDate,
         search: debouncedFilters.search,
         category: debouncedFilters.category,
         type: debouncedFilters.type,
@@ -174,16 +172,27 @@ const useTransactions = () => {
   }, [page]);
 
   useEffect(() => {
-    setPage(1);
+    if (page === 1) {
+      fetchTransactions();
+    } else {
+      setPage(1);
+    }
   }, [debouncedFilters]);
 
-  let debounceTimer: NodeJS.Timeout;
   useEffect(() => {
-    clearTimeout(debounceTimer);
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
 
-    debounceTimer = setTimeout(() => {
+    debounceTimerRef.current = setTimeout(() => {
       setDebouncedFilters(filters);
     }, 500);
+
+    return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+    };
   }, [filters]);
 
   const handleEditTransaction = (transaction: Transaction) => {
@@ -198,10 +207,6 @@ const useTransactions = () => {
   return {
     filters,
     setFilters,
-    setSearch,
-    search,
-    setDateRange,
-    dateRange,
     transactions,
     setIsTransactionDialogOpen,
     isTransactionDialogOpen,

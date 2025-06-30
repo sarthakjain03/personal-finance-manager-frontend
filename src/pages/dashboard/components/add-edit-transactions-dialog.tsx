@@ -38,7 +38,7 @@ const AddEditTransactionDialog = ({
 }: AddEditTransactionDialogProps) => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
-  const [type, setType] = useState("");
+  const [type, setType] = useState<"Income" | "Expense" | "">("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
 
@@ -126,13 +126,16 @@ const AddEditTransactionDialog = ({
             <Label htmlFor="type" className="text-right col-span-3">
               Type
             </Label>
-            <Select value={type} onValueChange={setType}>
+            <Select
+              value={type}
+              onValueChange={(value) => setType(value as any)}
+            >
               <SelectTrigger className="col-span-9 w-full">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="income">Income</SelectItem>
-                <SelectItem value="expense">Expense</SelectItem>
+                <SelectItem value="Income">Income</SelectItem>
+                <SelectItem value="Expense">Expense</SelectItem>
               </SelectContent>
             </Select>
           </div>

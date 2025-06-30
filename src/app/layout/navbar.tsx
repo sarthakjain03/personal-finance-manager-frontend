@@ -75,9 +75,6 @@ const Navbar = ({ isLandingView = false }) => {
                 >
                   Dashboard
                 </p>
-                <p className="text-main text-sm font-medium cursor-pointer">
-                  My Account
-                </p>
                 <p
                   className="text-main text-sm font-medium cursor-pointer"
                   onClick={handleGoogleSignOut}
