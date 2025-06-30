@@ -20,6 +20,7 @@ import useBudgets from "../hooks/use-budgets";
 import AddEditBudgetDialog from "../components/add-edit-budget-dialog";
 import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 import { CategoryIcons } from "@/lib/constants/categories";
+import formatCurrency from "@/utils/currency-formatter";
 
 const BudgetsView = () => {
   const { isMobile } = useResponsive();
@@ -72,7 +73,7 @@ const BudgetsView = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {totals.totalAllocated.toLocaleString()}
+              {formatCurrency(totals.totalAllocated)}
             </div>
             <p className="text-xs opacity-90">Monthly budget</p>
           </CardContent>
@@ -86,10 +87,10 @@ const BudgetsView = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold text-gray-900">
-              {totals.totalSpent.toLocaleString()}
+              {formatCurrency(totals.totalSpent)}
             </div>
             <p className="text-xs text-gray-600">
-              {totals.totalSpentPercentage}% of budget
+              {totals.totalSpentPercentage.toFixed(2)} % of budget
             </p>
           </CardContent>
         </Card>
@@ -106,7 +107,7 @@ const BudgetsView = () => {
                 totals.totalRemaining >= 0 ? "text-green-600" : "text-red-600"
               }`}
             >
-              {Math.abs(totals.totalRemaining).toLocaleString()}
+              {formatCurrency(Math.abs(totals.totalRemaining))}
             </div>
             <p className="text-xs text-gray-600">
               {totals.totalRemaining >= 0 ? "Under budget" : "Over budget"}
@@ -174,10 +175,10 @@ const BudgetsView = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-xl font-bold text-gray-900">
-                      {budget.spentAmount.toLocaleString()}
+                      {formatCurrency(budget.spentAmount)}
                     </p>
                     <p className="text-sm text-gray-600">
-                      of {budget.budgetAmount.toLocaleString()}
+                      of {formatCurrency(budget.budgetAmount)}
                     </p>
                   </div>
                   <div className="text-right">
@@ -187,7 +188,7 @@ const BudgetsView = () => {
                         budget.budgetAmount
                       )}`}
                     >
-                      {budget.spentPercentage}%
+                      {budget.spentPercentage} %
                     </p>
                     <p className="text-xs text-gray-500">Used</p>
                   </div>
@@ -206,7 +207,7 @@ const BudgetsView = () => {
                       {budget.remainingAmount >= 0
                         ? "Remaining"
                         : "Over budget"}
-                      : {Math.abs(budget.remainingAmount)}
+                      : {formatCurrency(Math.abs(totals.totalRemaining))}
                     </span>
                   </div>
                 </div>

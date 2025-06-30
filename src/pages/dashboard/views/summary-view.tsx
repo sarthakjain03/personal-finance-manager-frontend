@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { TrendingUp, TrendingDown, DollarSign, CreditCard } from "lucide-react";
 import {
   Card,
@@ -24,6 +23,7 @@ import {
 } from "recharts";
 import { cn } from "@/lib/utils";
 import useSummary from "../hooks/use-summary";
+import formatCurrency from "@/utils/currency-formatter";
 
 const pieChartColors = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
 
@@ -56,7 +56,7 @@ const SummaryView = () => {
           {monthlyCardsData?.incomeStats?.percentChange !== undefined && (
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">
-                {monthlyCardsData?.incomeStats?.currentMonth ?? 0}
+                {formatCurrency(monthlyCardsData?.incomeStats?.currentMonth)}
               </div>
               <p
                 className={cn("text-xs flex items-center gap-1 mt-1", [
@@ -94,7 +94,7 @@ const SummaryView = () => {
           {monthlyCardsData?.spendingStats?.percentChange !== undefined && (
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">
-                {monthlyCardsData?.spendingStats?.currentMonth ?? 0}
+                {formatCurrency(monthlyCardsData?.spendingStats?.currentMonth)}
               </div>
               <p
                 className={cn("text-xs flex items-center gap-1 mt-1", [

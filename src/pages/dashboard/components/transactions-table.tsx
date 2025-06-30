@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { Transaction } from "../types/transactions.types";
+import formatCurrency from "@/utils/currency-formatter";
 
 export const TransactionColumns: ({
   handleEdit,
@@ -40,10 +41,6 @@ export const TransactionColumns: ({
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
       const txnType = row.original.transactionType;
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "INR",
-      }).format(amount);
 
       return (
         <div className="text-right font-medium">
@@ -54,7 +51,7 @@ export const TransactionColumns: ({
                 : "text-green-700 font-semibold"
             }
           >
-            {formatted?.split("₹")?.[1]}
+            {formatCurrency(amount)}
           </span>
         </div>
       );
