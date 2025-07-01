@@ -41,6 +41,7 @@ const AddEditTransactionDialog = ({
   const [type, setType] = useState<"Income" | "Expense" | "">("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (action === "Edit" && transaction) {
@@ -63,6 +64,7 @@ const AddEditTransactionDialog = ({
 
   const handleSaveClick = async () => {
     if (description && category && type && amount && date) {
+      setSubmitting(true);
       const success = await handleSave({
         description,
         category,
@@ -75,11 +77,18 @@ const AddEditTransactionDialog = ({
       if (success) {
         handleReset();
       }
+      setSubmitting(false);
+    }
+  };
+
+  const handleOnOpenChange = () => {
+    if (!submitting) {
+      handleReset();
     }
   };
 
   return (
-    <Dialog open={open} onOpenChange={() => handleReset()}>
+    <Dialog open={open} onOpenChange={handleOnOpenChange}>
       <DialogContent className="sm:max-w-[550px]">
         <DialogHeader>
           <DialogTitle>{action} Transaction</DialogTitle>
@@ -98,6 +107,7 @@ const AddEditTransactionDialog = ({
               onChange={(e) => setDescription(e.target.value)}
               className="col-span-3"
               placeholder="Enter Description"
+              disabled={submitting}
             />
           </div>
 
@@ -105,7 +115,11 @@ const AddEditTransactionDialog = ({
             <Label htmlFor="category" className="text-right col-span-3">
               Category
             </Label>
-            <Select value={category} onValueChange={setCategory}>
+            <Select
+              value={category}
+              onValueChange={setCategory}
+              disabled={submitting}
+            >
               <SelectTrigger className="col-span-9 w-full">
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
@@ -129,6 +143,7 @@ const AddEditTransactionDialog = ({
             <Select
               value={type}
               onValueChange={(value) => setType(value as any)}
+              disabled={submitting}
             >
               <SelectTrigger className="col-span-9 w-full">
                 <SelectValue placeholder="Select type" />
@@ -152,13 +167,14 @@ const AddEditTransactionDialog = ({
               className="col-span-3"
               placeholder="Enter Amount"
               step="0.01"
+              disabled={submitting}
             />
           </div>
 
           <div className="grid grid-cols-4 items-center gap-4">
             <Label className="text-right">Date</Label>
             <Popover>
-              <PopoverTrigger asChild>
+              <PopoverTrigger asChild disabled={submitting}>
                 <Button
                   variant="outline"
                   className={cn(
@@ -177,16 +193,23 @@ const AddEditTransactionDialog = ({
                   onSelect={setDate}
                   initialFocus
                   className="p-3 pointer-events-auto"
+                  disabled={submitting}
                 />
               </PopoverContent>
             </Popover>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => handleReset()}>
+          <Button
+            variant="outline"
+            onClick={() => handleReset()}
+            disabled={submitting}
+          >
             Cancel
           </Button>
-          <Button onClick={handleSaveClick}>Save Transaction</Button>
+          <Button onClick={handleSaveClick} disabled={submitting}>
+            Save Transaction
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -163,6 +163,7 @@ const TransactionsView = () => {
           title={"Transaction"}
           description={selectedTransaction?.description || ""}
           onConfirm={() => deleteTransactionFromId(selectedTransaction?.id)}
+          isLoading={isLoading}
         />
       )}
     </div>

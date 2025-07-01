@@ -13,3 +13,5 @@ const formatCurrency = (
 };
 
 export default formatCurrency;
+
+// TODO: Add a currency selector in the navbar and in database of User as well.

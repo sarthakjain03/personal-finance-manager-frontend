@@ -13,7 +13,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Loader2, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { Transaction } from "../types/transactions.types";
 import formatCurrency from "@/utils/currency-formatter";
@@ -126,7 +126,11 @@ function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {table.getRowModel().rows?.length ? (
+          {isLoading ? (
+            <div className="w-full h-28 flex justify-center">
+              <Loader2 className="animate-spin" size={28} color="#023447" />
+            </div>
+          ) : table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}

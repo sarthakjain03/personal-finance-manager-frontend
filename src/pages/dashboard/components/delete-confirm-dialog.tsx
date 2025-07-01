@@ -15,6 +15,7 @@ interface DeleteDialogProps {
   title: string;
   description: string;
   onConfirm: () => void;
+  isLoading: boolean;
 }
 
 const DeleteConfirmDialog = ({
@@ -23,6 +24,7 @@ const DeleteConfirmDialog = ({
   title,
   description,
   onConfirm,
+  isLoading = false,
 }: DeleteDialogProps) => {
   const handleConfirm = () => {
     onConfirm();
@@ -40,12 +42,13 @@ const DeleteConfirmDialog = ({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel className="cursor-pointer">
+          <AlertDialogCancel className="cursor-pointer" disabled={isLoading}>
             Cancel
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
             className="bg-red-600 hover:bg-red-700 cursor-pointer"
+            disabled={isLoading}
           >
             Delete
           </AlertDialogAction>
