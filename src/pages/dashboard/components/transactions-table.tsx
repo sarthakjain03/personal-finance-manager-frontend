@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import {
   ColumnDef,
   flexRender,
@@ -88,7 +89,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   isLoading: boolean;
   hasMoreData: boolean;
-  setPage: (page: number) => void;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 function DataTable<TData, TValue>({
@@ -104,8 +105,32 @@ function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = container;
+
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight - 100;
+
+      if (isNearBottom && !isLoading && hasMoreData) {
+        setPage((prev) => prev + 1);
+      }
+    };
+
+    container.addEventListener("scroll", handleScroll);
+
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [isLoading, hasMoreData, setPage]);
+
   return (
-    <div className="rounded-md border">
+    <div
+      className="rounded-md border h-[600px] overflow-auto"
+      ref={containerRef}
+    >
       <Table>
         <TableHeader className="bg-secondary">
           {table.getHeaderGroups().map((headerGroup) => (
@@ -126,27 +151,36 @@ function DataTable<TData, TValue>({
           ))}
         </TableHeader>
         <TableBody>
-          {isLoading ? (
-            <div className="w-full h-28 flex justify-center">
-              <Loader2 className="animate-spin" size={28} color="#023447" />
-            </div>
-          ) : table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <TableRow
-                key={row.id}
-                data-state={row.getIsSelected() && "selected"}
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+          {table.getRowModel().rows?.length
+            ? table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              ))
+            : !isLoading && (
+                <TableRow>
+                  <TableCell
+                    colSpan={columns.length}
+                    className="h-12 text-center"
+                  >
+                    No results.
                   </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : (
+                </TableRow>
+              )}
+          {isLoading && (
             <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+              <TableCell colSpan={columns.length} align="center">
+                <Loader2 className="animate-spin" size={28} color="#023447" />
               </TableCell>
             </TableRow>
           )}
@@ -167,7 +201,7 @@ const TransactionsTable = ({
   columns: ColumnDef<Transaction>[];
   isLoading: boolean;
   hasMoreData: boolean;
-  setPage: (page: number) => void;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
 }) => {
   return (
     <DataTable

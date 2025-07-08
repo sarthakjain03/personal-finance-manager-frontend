@@ -30,14 +30,16 @@ const DashboardView = () => {
   };
 
   return (
-    <main className="flex flex-col gap-4">
+    <main className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="mt-24 px-8 md:px-12 flex flex-col gap-6">
-        <CurrentBalanceCard />
-        <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
-        <Suspense fallback={<div>Loading Tab View...</div>}>
-          {ComponentView && <ComponentView />}
-        </Suspense>
+      <div className="grow">
+        <div className="mt-24 px-8 md:px-12 flex flex-col gap-6">
+          <CurrentBalanceCard />
+          <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
+          <Suspense fallback={<div>Loading Tab View...</div>}>
+            {ComponentView && <ComponentView />}
+          </Suspense>
+        </div>
       </div>
       <Footer />
     </main>
