@@ -1,9 +1,11 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
   useReactTable,
+  getSortedRowModel,
+  SortingState,
 } from "@tanstack/react-table";
 import {
   Table,
@@ -14,7 +16,14 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Edit, Loader2, Trash2 } from "lucide-react";
+import {
+  Edit,
+  Loader2,
+  Trash2,
+  ArrowDownUp,
+  ArrowDownNarrowWide,
+  ArrowUpWideNarrow,
+} from "lucide-react";
 import { format } from "date-fns";
 import { Transaction } from "../types/transactions.types";
 import formatCurrency from "@/utils/currency-formatter";
@@ -25,8 +34,27 @@ export const TransactionColumns: ({
 }) => ColumnDef<Transaction>[] = ({ handleEdit, handleDelete }) => [
   {
     accessorKey: "date",
-    header: "Date",
+    header: ({ column }) => (
+      <button
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="hover:underline cursor-pointer flex items-center gap-2"
+      >
+        Date
+        {column.getIsSorted() === "asc" ? (
+          <ArrowUpWideNarrow size={15} />
+        ) : column.getIsSorted() === "desc" ? (
+          <ArrowDownNarrowWide size={15} />
+        ) : (
+          <ArrowDownUp size={15} />
+        )}
+      </button>
+    ),
     cell: ({ row }) => format(new Date(row.getValue("date")), "PP"),
+    sortingFn: (a, b) => {
+      const dateA = new Date(a.getValue("date")).getTime();
+      const dateB = new Date(b.getValue("date")).getTime();
+      return dateB - dateA;
+    },
   },
   {
     accessorKey: "description",
@@ -38,7 +66,21 @@ export const TransactionColumns: ({
   },
   {
     accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
+    header: ({ column }) => (
+      <button
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        className="hover:underline cursor-pointer flex items-center gap-2 justify-end w-full"
+      >
+        Amount
+        {column.getIsSorted() === "asc" ? (
+          <ArrowUpWideNarrow size={15} />
+        ) : column.getIsSorted() === "desc" ? (
+          <ArrowDownNarrowWide size={15} />
+        ) : (
+          <ArrowDownUp size={15} />
+        )}
+      </button>
+    ),
     cell: ({ row }) => {
       const amount = parseFloat(row.getValue("amount"));
       const txnType = row.original.transactionType;
@@ -56,6 +98,11 @@ export const TransactionColumns: ({
           </span>
         </div>
       );
+    },
+    sortingFn: (a, b) => {
+      const amountA = parseFloat(a.getValue("amount"));
+      const amountB = parseFloat(b.getValue("amount"));
+      return amountB - amountA; // descending by default
     },
   },
   {
@@ -99,10 +146,17 @@ function DataTable<TData, TValue>({
   hasMoreData,
   setPage,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    onSortingChange: setSorting,
   });
 
   const containerRef = useRef<HTMLDivElement>(null);
