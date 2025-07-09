@@ -100,7 +100,7 @@ const useTransactions = () => {
         if (transaction.reqType === "new") {
           setTransactions((prev) => {
             if (response?.data?.transaction) {
-              return [...prev, response?.data?.transaction];
+              return [response?.data?.transaction, ...prev];
             }
             return prev;
           });

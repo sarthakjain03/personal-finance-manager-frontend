@@ -23,11 +23,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AddEditTransactionDialogProps } from "../types/transactions.types";
-import { Categories, CategoryIcons } from "@/lib/constants/categories";
+import {
+  CategoryIcons,
+  TransactionCategories,
+} from "@/lib/constants/categories";
 
 const AddEditTransactionDialog = ({
   open,
@@ -112,31 +115,6 @@ const AddEditTransactionDialog = ({
           </div>
 
           <div className="grid grid-cols-12 items-center gap-4">
-            <Label htmlFor="category" className="text-right col-span-3">
-              Category
-            </Label>
-            <Select
-              value={category}
-              onValueChange={setCategory}
-              disabled={submitting}
-            >
-              <SelectTrigger className="col-span-9 w-full">
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {Categories?.map((cat) => (
-                  <SelectItem key={cat} value={cat}>
-                    <div className="flex items-center gap-2">
-                      <span>{CategoryIcons[cat]}</span>
-                      <span>{cat}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="grid grid-cols-12 items-center gap-4">
             <Label htmlFor="type" className="text-right col-span-3">
               Type
             </Label>
@@ -151,6 +129,31 @@ const AddEditTransactionDialog = ({
               <SelectContent>
                 <SelectItem value="Income">Income</SelectItem>
                 <SelectItem value="Expense">Expense</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="grid grid-cols-12 items-center gap-4">
+            <Label htmlFor="category" className="text-right col-span-3">
+              Category
+            </Label>
+            <Select
+              value={category}
+              onValueChange={setCategory}
+              disabled={submitting || type === ""}
+            >
+              <SelectTrigger className="col-span-9 w-full">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {TransactionCategories[type]?.map((cat) => (
+                  <SelectItem key={cat} value={cat}>
+                    <div className="flex items-center gap-2">
+                      <span>{CategoryIcons[cat]}</span>
+                      <span>{cat}</span>
+                    </div>
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -202,13 +205,25 @@ const AddEditTransactionDialog = ({
         <DialogFooter>
           <Button
             variant="outline"
+            className="cursor-pointer"
             onClick={() => handleReset()}
             disabled={submitting}
           >
             Cancel
           </Button>
-          <Button onClick={handleSaveClick} disabled={submitting}>
-            Save Transaction
+          <Button
+            className="cursor-pointer flex items-center gap-2 justify-center"
+            onClick={handleSaveClick}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="animate-spin" size={14} color="#fff" />
+                Saving...
+              </>
+            ) : (
+              "Save Transaction"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -10,6 +10,26 @@ export const Categories = [
   "Housing",
 ];
 
+export const TransactionCategories = {
+  Expense: [
+    "Food & Dining",
+    "Travel",
+    "Entertainment",
+    "Shopping",
+    "Health & Fitness",
+    "Bills & Utilities",
+    "Personal Care",
+    "Housing",
+  ],
+  Income: [
+    "Investment Return",
+    "Business",
+    "Real Estate",
+    "Side Hustle",
+    "Salary",
+  ],
+};
+
 export const CategoryIcons = {
   "Food & Dining": "🍽️",
   Travel: "🚗",
@@ -17,7 +37,11 @@ export const CategoryIcons = {
   Shopping: "🛍️",
   "Bills & Utilities": "💡",
   "Health & Fitness": "💪",
-  Investments: "🏦",
+  "Investment Return": "🏦",
   "Personal Care": "💝",
   Housing: "🏠",
+  Business: "💼",
+  "Real Estate": "🏘️",
+  "Side Hustle": "🧑‍💻",
+  Salary: "💰",
 };

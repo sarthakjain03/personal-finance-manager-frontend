@@ -33,7 +33,7 @@ const DashboardView = () => {
     <main className="min-h-screen flex flex-col">
       <Navbar />
       <div className="grow">
-        <div className="mt-24 px-8 md:px-12 flex flex-col gap-6">
+        <div className="mt-24 px-8 md:px-12 flex flex-col gap-6 min-h-screen">
           <CurrentBalanceCard />
           <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
           <Suspense fallback={<div>Loading Tab View...</div>}>
