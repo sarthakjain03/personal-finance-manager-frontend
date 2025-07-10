@@ -3,7 +3,7 @@ export interface Transaction {
   date: Date;
   description: string;
   category: string;
-  transactionType: "" | "Income" | "Expense";
+  transactionType: "Income" | "Expense";
   amount: number;
 }
 
@@ -22,7 +22,7 @@ export interface AddEditTransactionDialogProps {
   }: {
     description: string;
     category: string;
-    transactionType: "" | "Income" | "Expense";
+    transactionType: "Income" | "Expense";
     amount: number;
     date: Date;
     txnId?: string;

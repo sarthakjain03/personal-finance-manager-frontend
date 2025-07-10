@@ -5,7 +5,6 @@ export const Categories = [
   "Shopping",
   "Health & Fitness",
   "Bills & Utilities",
-  "Investments",
   "Personal Care",
   "Housing",
 ];
