@@ -29,6 +29,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { AddEditGoalDialogProps } from "../types/goals.types";
 import { CategoryIcons } from "@/lib/constants/categories";
+import { Loader2 } from "lucide-react";
 
 const AddEditGoalDialog = ({
   open,
@@ -44,6 +45,7 @@ const AddEditGoalDialog = ({
   const [category, setCategory] = useState("");
   const [deadline, setDeadline] = useState<Date | undefined>(undefined);
   const [current, setCurrent] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (goal && action === "Edit") {
@@ -68,6 +70,7 @@ const AddEditGoalDialog = ({
 
   const handleSaveClick = async () => {
     if (title && description && current && target && category && deadline) {
+      setSubmitting(true);
       const success = await handleSave({
         title,
         description,
@@ -81,6 +84,7 @@ const AddEditGoalDialog = ({
       if (success) {
         handleReset();
       }
+      setSubmitting(false);
     }
   };
 
@@ -224,11 +228,23 @@ const AddEditGoalDialog = ({
             className="cursor-pointer"
             variant="outline"
             onClick={handleReset}
+            disabled={submitting}
           >
             Cancel
           </Button>
-          <Button className="cursor-pointer" onClick={handleSaveClick}>
-            Save Goal
+          <Button
+            className="cursor-pointer"
+            onClick={handleSaveClick}
+            disabled={submitting}
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="animate-spin" size={14} color="#fff" />
+                Saving...
+              </>
+            ) : (
+              "Save Goal"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

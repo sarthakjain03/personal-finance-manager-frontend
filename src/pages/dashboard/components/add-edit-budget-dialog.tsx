@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/select";
 import { AddEditBudgetDialogProps } from "../types/budgets.types";
 import { CategoryIcons } from "@/lib/constants/categories";
+import { Loader2 } from "lucide-react";
 
 const AddEditBudgetDialog = ({
   open,
@@ -30,6 +31,7 @@ const AddEditBudgetDialog = ({
 }: AddEditBudgetDialogProps) => {
   const [category, setCategory] = useState("");
   const [budgetAmount, setBudgetAmount] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     if (budget) {
@@ -46,6 +48,7 @@ const AddEditBudgetDialog = ({
 
   const handleSaveClick = async () => {
     if (category && budgetAmount) {
+      setSubmitting(true);
       const success = await handleSave({
         category,
         budgetAmount: parseFloat(budgetAmount),
@@ -55,6 +58,7 @@ const AddEditBudgetDialog = ({
       if (success) {
         handleReset();
       }
+      setSubmitting(true);
     }
   };
 
@@ -116,11 +120,23 @@ const AddEditBudgetDialog = ({
             variant="outline"
             onClick={handleReset}
             className="cursor-pointer"
+            disabled={submitting}
           >
             Cancel
           </Button>
-          <Button onClick={handleSaveClick} className="cursor-pointer">
-            Save Budget
+          <Button
+            onClick={handleSaveClick}
+            className="cursor-pointer"
+            disabled={submitting}
+          >
+            {submitting ? (
+              <>
+                <Loader2 className="animate-spin" size={14} color="#fff" />
+                Saving...
+              </>
+            ) : (
+              "Save Budget"
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

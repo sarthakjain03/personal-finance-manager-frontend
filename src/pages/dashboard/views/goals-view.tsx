@@ -58,6 +58,7 @@ const GoalsView = () => {
         <Button
           onClick={() => setGoalDialogOpen("new")}
           className="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+          disabled={isLoading || goals?.length >= 25}
         >
           <Plus className="w-4 h-4" />
           New Goal
@@ -173,6 +174,7 @@ const GoalsView = () => {
           title="Goal"
           description={selectedGoal?.title || ""}
           onConfirm={() => deleteGoalFromId(selectedGoal.id)}
+          isLoading={isLoading}
         />
       )}
     </div>

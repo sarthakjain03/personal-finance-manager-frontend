@@ -1,4 +1,3 @@
-import useResponsive from "@/hooks/use-responsive";
 import {
   Card,
   CardContent,
@@ -23,7 +22,6 @@ import AddEditTransactionDialog from "../components/add-edit-transactions-dialog
 import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 
 const TransactionsView = () => {
-  const { isMobile } = useResponsive();
   const {
     transactions,
     setIsTransactionDialogOpen,
@@ -35,7 +33,6 @@ const TransactionsView = () => {
     isLoading,
     createOrEditTransaction,
     hasMoreData,
-    page,
     setPage,
     deleteTransactionFromId,
     setFilters,

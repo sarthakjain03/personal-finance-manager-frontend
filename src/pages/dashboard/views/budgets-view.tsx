@@ -1,4 +1,3 @@
-import useResponsive from "@/hooks/use-responsive";
 import {
   Card,
   CardContent,
@@ -6,14 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Wallet,
-  Plus,
-  AlertTriangle,
-  CheckCircle,
-  Edit,
-  Trash2,
-} from "lucide-react";
+import { Plus, AlertTriangle, CheckCircle, Edit, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import useBudgets from "../hooks/use-budgets";
@@ -23,7 +15,6 @@ import { CategoryIcons } from "@/lib/constants/categories";
 import formatCurrency from "@/utils/currency-formatter";
 
 const BudgetsView = () => {
-  const { isMobile } = useResponsive();
   const {
     deleteBudgetOpen,
     setDeleteBudgetOpen,
@@ -57,6 +48,7 @@ const BudgetsView = () => {
         <Button
           onClick={handleCreateBudget}
           className="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+          disabled={isLoading}
         >
           <Plus className="w-4 h-4" />
           Create Budget
@@ -236,6 +228,7 @@ const BudgetsView = () => {
           title={"Budget"}
           description={selectedBudget?.category || ""}
           onConfirm={() => deleteBudgetFromId(selectedBudget.id)}
+          isLoading={isLoading}
         />
       )}
     </div>
