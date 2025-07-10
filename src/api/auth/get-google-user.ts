@@ -9,6 +9,7 @@ interface UserData {
   email?: string;
   photoUrl?: string;
   currentBalance?: number;
+  currencyFormat?: string;
 }
 
 const getGoogleUser = async (
@@ -44,6 +45,7 @@ const getGoogleUser = async (
       email: response?.data?.emailAddresses[0]?.value,
       photoUrl: response?.data?.photos[0]?.url,
       currentBalance: userLogin?.data?.currentBalance,
+      currencyFormat: userLogin?.data?.currencyFormat,
     };
 
     return userDetails;

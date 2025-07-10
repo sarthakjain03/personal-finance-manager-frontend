@@ -24,10 +24,12 @@ import {
 import { cn } from "@/lib/utils";
 import useSummary from "../hooks/use-summary";
 import formatCurrency from "@/utils/currency-formatter";
+import useUserStore from "@/store/user-store";
 
 const pieChartColors = ["#3B82F6", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
 
 const SummaryView = () => {
+  const { user } = useUserStore();
   const {
     loading,
     pieChartLoading,
@@ -56,7 +58,10 @@ const SummaryView = () => {
           {monthlyCardsData?.incomeStats?.percentChange !== undefined && (
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">
-                {formatCurrency(monthlyCardsData?.incomeStats?.currentMonth)}
+                {formatCurrency(
+                  monthlyCardsData?.incomeStats?.currentMonth,
+                  user
+                )}
               </div>
               <p
                 className={cn("text-xs flex items-center gap-1 mt-1", [
@@ -94,7 +99,10 @@ const SummaryView = () => {
           {monthlyCardsData?.spendingStats?.percentChange !== undefined && (
             <CardContent>
               <div className="text-2xl font-bold text-gray-900">
-                {formatCurrency(monthlyCardsData?.spendingStats?.currentMonth)}
+                {formatCurrency(
+                  monthlyCardsData?.spendingStats?.currentMonth,
+                  user
+                )}
               </div>
               <p
                 className={cn("text-xs flex items-center gap-1 mt-1", [

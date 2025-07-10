@@ -14,7 +14,7 @@ const CurrentBalanceCard = () => {
           <CardTitle className="text-lg font-medium">Current Balance</CardTitle>
         </div>
         <div className="text-3xl font-bold">
-          {formatCurrency(user?.currentBalance) || 0}
+          {formatCurrency(user?.currentBalance, user) || 0}
         </div>
       </CardHeader>
     </Card>

@@ -7,4 +7,5 @@ export interface User {
   // tokenExpiry: number;
   profilePhotoUrl?: string;
   currentBalance: number;
+  currencyFormat: string;
 }

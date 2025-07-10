@@ -214,6 +214,7 @@ const useTransactions = () => {
     tableColumns: TransactionColumns({
       handleEdit: handleEditTransaction,
       handleDelete: handleDeleteTransaction,
+      user,
     }),
     setDeleteTransactionOpen,
     deleteTransactionOpen,

@@ -10,9 +10,10 @@ import useUserStore from "@/store/user-store";
 import useResponsive from "@/hooks/use-responsive";
 import useGoogleAuth from "@/hooks/use-google-auth";
 import { useNavigate } from "react-router-dom";
+import CurrencySelector from "@/components/app/currency-selector";
 
 const Navbar = ({ isLandingView = false }) => {
-  const { user } = useUserStore();
+  const { user, setUser } = useUserStore();
   const { isMobile } = useResponsive();
   const { loading, handleGoogleSignOut } = useGoogleAuth();
   const navigate = useNavigate();
@@ -57,7 +58,8 @@ const Navbar = ({ isLandingView = false }) => {
           <Loader2 className="animate-spin" />
         </Button>
       ) : (
-        <>
+        <div className="flex gap-4 items-center">
+          <CurrencySelector />
           <Popover>
             <PopoverTrigger>
               <Avatar className="cursor-pointer size-10 text-md font-medium text-secondary">
@@ -84,7 +86,7 @@ const Navbar = ({ isLandingView = false }) => {
               </div>
             </PopoverContent>
           </Popover>
-        </>
+        </div>
       )}
     </header>
   );

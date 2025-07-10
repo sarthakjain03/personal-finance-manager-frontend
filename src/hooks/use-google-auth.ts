@@ -28,6 +28,7 @@ const useGoogleAuth = () => {
             email: userDetails?.email,
             profilePhotoUrl: userDetails?.photoUrl,
             currentBalance: userDetails?.currentBalance,
+            currencyFormat: userDetails?.currencyFormat || "INR",
           });
         }
       } else {

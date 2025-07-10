@@ -31,7 +31,8 @@ import formatCurrency from "@/utils/currency-formatter";
 export const TransactionColumns: ({
   handleEdit,
   handleDelete,
-}) => ColumnDef<Transaction>[] = ({ handleEdit, handleDelete }) => [
+  user,
+}) => ColumnDef<Transaction>[] = ({ handleEdit, handleDelete, user }) => [
   {
     accessorKey: "date",
     header: ({ column }) => (
@@ -94,7 +95,7 @@ export const TransactionColumns: ({
                 : "text-green-700 font-semibold"
             }
           >
-            {formatCurrency(amount)}
+            {formatCurrency(amount, user)}
           </span>
         </div>
       );

@@ -26,8 +26,10 @@ import DeleteConfirmDialog from "../components/delete-confirm-dialog";
 import useGoals from "../hooks/use-goals";
 import { format } from "date-fns";
 import formatCurrency from "@/utils/currency-formatter";
+import useUserStore from "@/store/user-store";
 
 const GoalsView = () => {
+  const { user } = useUserStore();
   const {
     goals,
     goalDialogOpen,
@@ -117,10 +119,10 @@ const GoalsView = () => {
                 <div className="flex justify-between items-center">
                   <div>
                     <p className="text-2xl font-bold text-gray-900">
-                      {formatCurrency(goal.currentAmount)}
+                      {formatCurrency(goal.currentAmount, user)}
                     </p>
                     <p className="text-sm text-gray-600">
-                      of {formatCurrency(goal.targetAmount)}
+                      of {formatCurrency(goal.targetAmount, user)}
                     </p>
                   </div>
                   <div className="text-right">
@@ -141,7 +143,10 @@ const GoalsView = () => {
                   <div className="flex items-center gap-1 text-green-600">
                     <TrendingUp className="w-3 h-3" />
                     <span>
-                      {formatCurrency(goal.targetAmount - goal.currentAmount)}{" "}
+                      {formatCurrency(
+                        goal.targetAmount - goal.currentAmount,
+                        user
+                      )}{" "}
                       to go
                     </span>
                   </div>

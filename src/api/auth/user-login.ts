@@ -16,10 +16,12 @@ const login = async ({
   expiresIn,
   name,
   profilePhotoUrl,
-}: LoginData): Promise<ApiResponseData<{ currentBalance: number }>> => {
+}: LoginData): Promise<
+  ApiResponseData<{ currentBalance: number; currencyFormat: string }>
+> => {
   try {
     const response = await axiosInstance.post<
-      ApiResponseData<{ currentBalance: number }>
+      ApiResponseData<{ currentBalance: number; currencyFormat: string }>
     >(
       `/auth/login`,
       {
