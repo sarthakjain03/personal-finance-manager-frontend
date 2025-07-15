@@ -13,7 +13,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Search, CalendarIcon, XCircle, Plus } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Search, CalendarIcon, XCircle, Plus, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import TransactionsTable from "../components/transactions-table";
@@ -37,6 +44,7 @@ const TransactionsView = () => {
     deleteTransactionFromId,
     setFilters,
     filters,
+    initialFilters,
   } = useTransactions();
 
   return (
@@ -81,6 +89,25 @@ const TransactionsView = () => {
                   autoFocus={false}
                 />
               </div>
+              {/* Transaction Type */}
+              <div className="flex-1 relative max-w-[150px]">
+                <Select
+                  onValueChange={(value) =>
+                    setFilters((prev) => ({ ...prev, type: value }))
+                  }
+                  value={filters?.type}
+                  disabled={isLoading}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Income">Income</SelectItem>
+                    <SelectItem value="Expense">Expense</SelectItem>
+                    <SelectItem value="Both">Both</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
               {/* Date Range */}
               <Popover>
                 <PopoverTrigger asChild>
@@ -101,7 +128,7 @@ const TransactionsView = () => {
                         ? `${format(filters?.dateRange.from, "MMM d, yyyy")}`
                         : "Select Date Range"}
                     </Button>
-                    {filters?.dateRange?.from && filters?.dateRange?.to && (
+                    {/* {filters?.dateRange?.from && filters?.dateRange?.to && (
                       <XCircle
                         className="h-4 w-4 cursor-pointer"
                         onClick={() =>
@@ -111,7 +138,7 @@ const TransactionsView = () => {
                           }))
                         }
                       />
-                    )}
+                    )} */}
                   </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
@@ -125,11 +152,18 @@ const TransactionsView = () => {
                       }))
                     }
                     className={cn("p-3 pointer-events-auto")}
-                    numberOfMonths={2}
+                    numberOfMonths={1}
                     initialFocus
                   />
                 </PopoverContent>
               </Popover>
+              <Button
+                onClick={() => setFilters(initialFilters)}
+                className="cursor-pointer bg-gradient-to-r from-blue-600 to-teal-600 hover:from-blue-700 hover:to-teal-700"
+                size="sm"
+              >
+                <RotateCcw className="w-4 h-4" />
+              </Button>
             </div>
             <TransactionsTable
               data={transactions || []}

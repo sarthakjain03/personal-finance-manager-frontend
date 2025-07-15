@@ -15,21 +15,18 @@ interface Filters {
 }
 
 const limit = 20;
+const initialFilters = {
+  category: "",
+  type: "",
+  dateRange: { from: undefined, to: undefined },
+  search: "",
+};
 
 const useTransactions = () => {
   const { setUser, user } = useUserStore();
-  const [filters, setFilters] = useState<Filters>({
-    category: "",
-    type: "",
-    dateRange: { from: undefined, to: undefined },
-    search: "",
-  });
-  const [debouncedFilters, setDebouncedFilters] = useState<Filters>({
-    category: "",
-    type: "",
-    dateRange: { from: undefined, to: undefined },
-    search: "",
-  });
+  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [debouncedFilters, setDebouncedFilters] =
+    useState<Filters>(initialFilters);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isTransactionDialogOpen, setIsTransactionDialogOpen] = useState("");
   const [selectedTransaction, setSelectedTransaction] =
@@ -55,13 +52,18 @@ const useTransactions = () => {
         toDate: payloadToDate,
         search: debouncedFilters.search,
         category: debouncedFilters.category,
-        type: debouncedFilters.type,
+        type: debouncedFilters.type === "Both" ? "" : debouncedFilters.type,
       });
       if (response?.success && response?.data) {
+        const sortedData = response?.data?.sort((a, b) => {
+          const dateA = new Date(a.date).getTime();
+          const dateB = new Date(b.date).getTime();
+          return dateB - dateA;
+        });
         if (page === 1) {
-          setTransactions(response?.data);
+          setTransactions(sortedData);
         } else {
-          setTransactions((prev) => [...prev, ...(response?.data ?? [])]);
+          setTransactions((prev) => [...prev, ...(sortedData ?? [])]);
         }
         if (response?.data.length < limit) {
           setHasMoreData(false);
@@ -224,6 +226,7 @@ const useTransactions = () => {
     page,
     setPage,
     deleteTransactionFromId,
+    initialFilters,
   };
 };
 
