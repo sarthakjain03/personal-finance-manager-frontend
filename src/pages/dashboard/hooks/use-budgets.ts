@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Budget } from "../types/budgets.types";
-import { Categories } from "@/lib/constants/categories";
+import { ExpenseCaetgories } from "@/lib/constants/categories";
 import { toast } from "sonner";
 import getAllBudgets from "../apis/budget/get-all-budgets";
 import addOrEditBudget from "../apis/budget/add-edit-budget";
@@ -136,7 +136,7 @@ const useBudgets = () => {
 
   useEffect(() => {
     setAvailableCategories(
-      Categories.filter(
+      ExpenseCaetgories.filter(
         (cat) => !budgets?.some((budget) => budget.category === cat)
       )
     );

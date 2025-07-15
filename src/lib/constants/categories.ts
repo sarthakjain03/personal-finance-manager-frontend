@@ -1,4 +1,4 @@
-export const Categories = [
+export const ExpenseCaetgories = [
   "Food & Dining",
   "Travel",
   "Entertainment",

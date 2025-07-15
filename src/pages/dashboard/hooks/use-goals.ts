@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Goal } from "../types/goals.types";
-import { Categories } from "@/lib/constants/categories";
+import { ExpenseCaetgories } from "@/lib/constants/categories";
 import { toast } from "sonner";
 import getAllGoals from "../apis/goal/get-all-goals";
 import deleteGoal from "../apis/goal/delete-goal";
@@ -127,7 +127,7 @@ const useGoals = () => {
 
   useEffect(() => {
     setAvailableCategories(
-      Categories.filter(
+      ExpenseCaetgories.filter(
         (cat) => !goals?.some((budget) => budget.category === cat)
       )
     );
