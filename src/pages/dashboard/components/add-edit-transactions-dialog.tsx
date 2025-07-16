@@ -27,6 +27,7 @@ import {
   Form,
   FormControl,
   FormField,
+  FormLabel,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
@@ -133,7 +134,7 @@ const AddEditTransactionDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOnOpenChange}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{action} Transaction</DialogTitle>
           <DialogDescription>
@@ -142,160 +143,152 @@ const AddEditTransactionDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <FormField
-                  control={control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Description"
-                          disabled={submitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-12 items-center gap-4">
-                <Label htmlFor="type" className="text-right col-span-3">
-                  Type
-                </Label>
-                <FormField
-                  control={control}
-                  name="type"
-                  render={({ field }) => (
-                    <FormItem className="col-span-9">
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
+            <div className="flex flex-col gap-5 py-4">
+              <FormField
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Description <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Description"
                         disabled={submitting}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="Income">Income</SelectItem>
-                          <SelectItem value="Expense">Expense</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className="grid grid-cols-12 items-center gap-4">
-                <Label htmlFor="category" className="text-right col-span-3">
-                  Category
-                </Label>
-                <FormField
-                  control={control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem className="col-span-9">
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        disabled={submitting}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {TransactionCategories[watch("type")]?.map((cat) => (
-                            <SelectItem key={cat} value={cat}>
-                              <div className="flex items-center gap-2">
-                                <span>{CategoryIcons[cat]}</span>
-                                <span>{cat}</span>
-                              </div>
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="amount" className="text-right">
-                  Amount
-                </Label>
-                <FormField
-                  control={control}
-                  name="amount"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
+              <FormField
+                control={control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Type <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      disabled={submitting}
+                    >
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Amount"
-                          type="number"
-                          step="0.01"
-                          disabled={submitting}
-                        />
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select type" />
+                        </SelectTrigger>
                       </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                      <SelectContent>
+                        <SelectItem value="Income">Income</SelectItem>
+                        <SelectItem value="Expense">Expense</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label className="text-right">Date</Label>
-                <FormField
-                  control={control}
-                  name="date"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <Popover>
-                        <PopoverTrigger asChild disabled={submitting}>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            className="p-3 pointer-events-auto"
-                            disabled={submitting}
-                            toDate={new Date()}
-                            captionLayout="dropdown"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Category <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      disabled={submitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {TransactionCategories[watch("type")]?.map((cat) => (
+                          <SelectItem key={cat} value={cat}>
+                            <div className="flex items-center gap-2">
+                              <span>{CategoryIcons[cat]}</span>
+                              <span>{cat}</span>
+                            </div>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Amount <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Amount"
+                        type="number"
+                        step="0.01"
+                        disabled={submitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Date <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild disabled={submitting}>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          className="p-3 pointer-events-auto"
+                          disabled={submitting}
+                          toDate={new Date()}
+                          captionLayout="dropdown"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <DialogFooter>
               <Button

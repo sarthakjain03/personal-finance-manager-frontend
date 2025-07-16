@@ -29,6 +29,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
@@ -159,7 +160,7 @@ const AddEditGoalDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOnOpenChange}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{action} Goal</DialogTitle>
           <DialogDescription>
@@ -169,187 +170,172 @@ const AddEditGoalDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="title" className="text-right">
-                  Title
-                </Label>
-                <FormField
-                  control={control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Title"
-                          disabled={submitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="description" className="text-right">
-                  Description
-                </Label>
-                <FormField
-                  control={control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Textarea
-                          {...field}
-                          className="col-span-3"
-                          placeholder="Enter Description"
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="targetAmount" className="text-right">
-                  Target Amount
-                </Label>
-                <FormField
-                  control={control}
-                  name="targetAmount"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Target Amount"
-                          type="number"
-                          step={0}
-                          disabled={submitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label
-                  htmlFor="currentAmount"
-                  className="text-right col-span-1 text-nowrap"
-                >
-                  Current Amount
-                </Label>
-                <FormField
-                  control={control}
-                  name="currentAmount"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Current Amount"
-                          type="number"
-                          step={0}
-                          disabled={submitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-12 items-center gap-4">
-                <Label htmlFor="category" className="text-right col-span-3">
-                  Category
-                </Label>
-                <FormField
-                  control={control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem className="col-span-9">
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
+            <div className="flex flex-col gap-5 py-4">
+              <FormField
+                control={control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Title <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Title"
                         disabled={submitting}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {goal
-                            ? [...availableCategories, goal.category]?.map(
-                                (cat) => (
-                                  <SelectItem key={cat} value={cat}>
-                                    <div className="flex items-center gap-2">
-                                      <span>{CategoryIcons[cat]}</span>
-                                      <span>{cat}</span>
-                                    </div>
-                                  </SelectItem>
-                                )
-                              )
-                            : availableCategories?.map((cat) => (
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Description <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        {...field}
+                        className="col-span-3"
+                        placeholder="Enter Description"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="targetAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Target Amount <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Target Amount"
+                        type="number"
+                        step={0}
+                        disabled={submitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="currentAmount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Current Amount <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Current Amount"
+                        type="number"
+                        step={0}
+                        disabled={submitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Category <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      disabled={submitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {goal
+                          ? [...availableCategories, goal.category]?.map(
+                              (cat) => (
                                 <SelectItem key={cat} value={cat}>
                                   <div className="flex items-center gap-2">
                                     <span>{CategoryIcons[cat]}</span>
                                     <span>{cat}</span>
                                   </div>
                                 </SelectItem>
-                              ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="deadline" className="text-right">
-                  Deadline
-                </Label>
-                <FormField
-                  control={control}
-                  name="deadline"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <Popover>
-                        <PopoverTrigger asChild disabled={submitting}>
-                          <Button
-                            variant="outline"
-                            className={cn(
-                              "justify-start text-left font-normal",
-                              !field.value && "text-muted-foreground"
-                            )}
-                          >
-                            <CalendarIcon className="mr-2 h-4 w-4" />
-                            {field.value ? (
-                              format(field.value, "PPP")
-                            ) : (
-                              <span>Pick a Deadline</span>
-                            )}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            className="p-3 pointer-events-auto"
-                            disabled={submitting}
-                            captionLayout="dropdown"
-                            numberOfMonths={1}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                              )
+                            )
+                          : availableCategories?.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                <div className="flex items-center gap-2">
+                                  <span>{CategoryIcons[cat]}</span>
+                                  <span>{cat}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="deadline"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Deadline <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Popover>
+                      <PopoverTrigger asChild disabled={submitting}>
+                        <Button
+                          variant="outline"
+                          className={cn(
+                            "justify-start text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a Deadline</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar
+                          mode="single"
+                          selected={field.value}
+                          onSelect={field.onChange}
+                          className="p-3 pointer-events-auto"
+                          disabled={submitting}
+                          captionLayout="dropdown"
+                          numberOfMonths={1}
+                        />
+                      </PopoverContent>
+                    </Popover>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <DialogFooter>
               <Button

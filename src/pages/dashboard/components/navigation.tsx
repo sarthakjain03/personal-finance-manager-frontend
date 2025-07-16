@@ -12,9 +12,21 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
       label: "Summary",
       description: "Overview of your finances",
     },
-    { id: "transactions", label: "Transactions", description: "Track your expenses and income" },
-    { id: "goals", label: "Goals", description: "Financial objectives" },
-    { id: "budgets", label: "Budgets", description: "Budget management" },
+    {
+      id: "transactions",
+      label: "Transactions",
+      description: "Track your expenses and income",
+    },
+    {
+      id: "goals",
+      label: "Goals",
+      description: "Set your financial objectives",
+    },
+    {
+      id: "budgets",
+      label: "Budgets",
+      description: "Efficient budget management",
+    },
   ];
 
   return (
@@ -34,7 +46,7 @@ const Navigation = ({ activeTab, onTabChange }: NavigationProps) => {
             <div className="font-semibold text-lg">{tab.label}</div>
             <div
               className={cn(
-                "text-sm",
+                "text-sm hidden md:block",
                 activeTab === tab.id ? "text-white/75" : "text-gray-500"
               )}
             >

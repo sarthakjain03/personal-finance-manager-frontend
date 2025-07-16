@@ -90,7 +90,7 @@ const TransactionsView = () => {
                 />
               </div>
               {/* Transaction Type */}
-              <div className="flex-1 relative max-w-[150px]">
+              <div className="flex-1 relative max-w-full md:max-w-[150px]">
                 <Select
                   onValueChange={(value) =>
                     setFilters((prev) => ({ ...prev, type: value }))
@@ -115,7 +115,7 @@ const TransactionsView = () => {
                     <Button
                       variant="outline"
                       className={cn(
-                        "flex gap-2 justify-start text-left font-normal"
+                        "flex gap-2 justify-center md:justify-start text-left font-normal w-full md:w-auto"
                       )}
                     >
                       <CalendarIcon className="h-4 w-4" />

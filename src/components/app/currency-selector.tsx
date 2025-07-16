@@ -52,7 +52,7 @@ const CurrencySelector = () => {
       onValueChange={handleCurrencyChange}
       disabled={updating}
     >
-      <SelectTrigger className="w-full">
+      <SelectTrigger className="w-full cursor-pointer bg-white/80 border border-gray-400">
         <SelectValue placeholder="Currency Format" />
       </SelectTrigger>
       <SelectContent>

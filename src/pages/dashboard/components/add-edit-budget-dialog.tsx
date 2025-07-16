@@ -22,6 +22,7 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { z } from "zod";
@@ -104,7 +105,7 @@ const AddEditBudgetDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={handleOnOpenChange}>
-      <DialogContent className="sm:max-w-[550px]">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{action} Budget</DialogTitle>
           <DialogDescription>
@@ -113,76 +114,72 @@ const AddEditBudgetDialog = ({
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)}>
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-12 items-center gap-4">
-                <Label htmlFor="category" className="text-right col-span-3">
-                  Category
-                </Label>
-                <FormField
-                  control={control}
-                  name="category"
-                  render={({ field }) => (
-                    <FormItem className="col-span-9">
-                      <Select
-                        defaultValue={field.value}
-                        onValueChange={field.onChange}
-                        disabled={submitting}
-                      >
-                        <FormControl>
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select category" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          {budget
-                            ? [...availableCategories, budget.category]?.map(
-                                (cat) => (
-                                  <SelectItem key={cat} value={cat}>
-                                    <div className="flex items-center gap-2">
-                                      <span>{CategoryIcons[cat]}</span>
-                                      <span>{cat}</span>
-                                    </div>
-                                  </SelectItem>
-                                )
-                              )
-                            : availableCategories?.map((cat) => (
+            <div className="flex flex-col gap-5 py-4">
+              <FormField
+                control={control}
+                name="category"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Category <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <Select
+                      defaultValue={field.value}
+                      onValueChange={field.onChange}
+                      disabled={submitting}
+                    >
+                      <FormControl>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        {budget
+                          ? [...availableCategories, budget.category]?.map(
+                              (cat) => (
                                 <SelectItem key={cat} value={cat}>
                                   <div className="flex items-center gap-2">
                                     <span>{CategoryIcons[cat]}</span>
                                     <span>{cat}</span>
                                   </div>
                                 </SelectItem>
-                              ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="allocated" className="text-right">
-                  Budget Amount
-                </Label>
-                <FormField
-                  control={control}
-                  name="amount"
-                  render={({ field }) => (
-                    <FormItem className="col-span-3">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter Amount"
-                          type="number"
-                          step="0.01"
-                          disabled={submitting}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+                              )
+                            )
+                          : availableCategories?.map((cat) => (
+                              <SelectItem key={cat} value={cat}>
+                                <div className="flex items-center gap-2">
+                                  <span>{CategoryIcons[cat]}</span>
+                                  <span>{cat}</span>
+                                </div>
+                              </SelectItem>
+                            ))}
+                      </SelectContent>
+                    </Select>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="amount"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="gap-1">
+                      Budget Amount <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        {...field}
+                        placeholder="Enter Amount"
+                        type="number"
+                        step="0.01"
+                        disabled={submitting}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </div>
             <DialogFooter>
               <Button
