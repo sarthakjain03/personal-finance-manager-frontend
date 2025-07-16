@@ -1,7 +1,7 @@
-import { useState, lazy, JSX, Suspense } from "react";
+import { useState, lazy, JSX, Suspense, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "@/app/layout/navbar";
 import Footer from "@/app/layout/footer";
-import useResponsive from "@/hooks/use-responsive";
 import Navigation from "../components/navigation";
 import CurrentBalanceCard from "../components/current-balance";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -90,15 +90,15 @@ const SkeletonLoading = (activeTab: string) => {
 };
 
 const DashboardView = () => {
-  const { isMobile } = useResponsive();
-  const [activeTab, setActiveTab] = useState("summary");
-  const [ComponentView, setComponentView] = useState<React.LazyExoticComponent<
-    () => JSX.Element
-  > | null>(tabsViews.summary);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tabId = queryParams.get("tab") ?? "summary";
+  const activeTab = useMemo(() => tabId, [tabId]);
+  const ComponentView = useMemo(() => tabsViews[tabId], [tabId]);
+  const navigate = useNavigate();
 
   const handleTabChange = (tabId: string) => {
-    setActiveTab(tabId);
-    setComponentView(tabsViews[tabId]);
+    navigate(`/dashboard?tab=${tabId}`);
   };
 
   return (
