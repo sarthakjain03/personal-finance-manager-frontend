@@ -176,6 +176,10 @@ const SummaryView = () => {
           <CardContent>
             {spendTrendChartLoading ? (
               <Skeleton className="h-76" />
+            ) : spendTrendChartData.length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl py-24">
+                No Expenses Added Yet
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height={300}>
                 <AreaChart data={spendTrendChartData}>
@@ -212,7 +216,9 @@ const SummaryView = () => {
           <CardHeader className="flex items-center justify-between">
             <div>
               <CardTitle>Spending by Category</CardTitle>
-              <CardDescription>This month's expense breakdown</CardDescription>
+              <CardDescription>
+                This {pieChartTimeline}'s expense breakdown
+              </CardDescription>
             </div>
             <ToggleGroup
               value={pieChartTimeline}
@@ -237,6 +243,10 @@ const SummaryView = () => {
           <CardContent>
             {pieChartLoading ? (
               <Skeleton className="h-76" />
+            ) : categoryPieChartData.length === 0 ? (
+              <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl py-24">
+                No Expenses Added Yet
+              </div>
             ) : (
               <ResponsiveContainer width="100%" height={300}>
                 <PieChart>
@@ -276,6 +286,10 @@ const SummaryView = () => {
         <CardContent>
           {budgetChartLoading ? (
             <Skeleton className="h-76" />
+          ) : budgetChartData.length === 0 ? (
+            <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl py-24">
+              No Budgets Set
+            </div>
           ) : (
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={budgetChartData}>

@@ -202,7 +202,8 @@ const useTransactions = () => {
     setIsTransactionDialogOpen("edit");
   };
 
-  const handleDeleteTransaction = (transactionId: string) => {
+  const handleDeleteTransaction = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
     setDeleteTransactionOpen(true);
   };
 

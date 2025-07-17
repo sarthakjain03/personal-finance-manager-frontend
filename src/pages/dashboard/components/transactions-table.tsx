@@ -117,15 +117,15 @@ export const TransactionColumns: ({
           className="cursor-pointer"
           onClick={() => handleEdit(row.original)}
         >
-          <Edit className="w-4 h-4" />
+          <Edit className="w-4 h-4 text-blue-700" />
         </Button>
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => handleDelete(row.original.id)}
+          onClick={() => handleDelete(row.original)}
           className="cursor-pointer"
         >
-          <Trash2 className="w-4 h-4" />
+          <Trash2 className="w-4 h-4 text-red-700" />
         </Button>
       </div>
     ),
@@ -226,9 +226,9 @@ function DataTable<TData, TValue>({
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-12 text-center"
+                    className="h-12 text-center pt-6"
                   >
-                    No results.
+                    No Transactions Added
                   </TableCell>
                 </TableRow>
               )}

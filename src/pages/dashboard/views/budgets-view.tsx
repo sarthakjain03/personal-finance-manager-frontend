@@ -113,7 +113,12 @@ const BudgetsView = () => {
 
       {/* Budget Categories */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {budgets.map((budget) => {
+        {budgets?.length === 0 && (
+          <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl col-span-2 pt-14">
+            No Budgets Set
+          </div>
+        )}
+        {budgets?.map((budget) => {
           return (
             <Card key={budget.id} className="hover:shadow-lg transition-shadow">
               <CardHeader className="pb-4">
@@ -150,7 +155,7 @@ const BudgetsView = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleEditBudget(budget)}
-                        className="cursor-pointer h-8 w-8 p-0"
+                        className="cursor-pointer h-8 w-8 p-0 text-blue-700"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -158,7 +163,7 @@ const BudgetsView = () => {
                         variant="ghost"
                         size="sm"
                         onClick={() => handleDeleteBudget(budget)}
-                        className="cursor-pointer h-8 w-8 p-0 text-red-600 hover:text-red-700"
+                        className="cursor-pointer h-8 w-8 p-0 text-red-600"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

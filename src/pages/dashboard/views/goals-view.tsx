@@ -69,6 +69,11 @@ const GoalsView = () => {
 
       {/* Goals Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {goals?.length === 0 && (
+          <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl col-span-2 pt-14">
+            No Goals Added Yet
+          </div>
+        )}
         {goals?.map((goal) => {
           const progress = (goal.currentAmount / goal.targetAmount) * 100;
           return (
