@@ -124,7 +124,7 @@ const SummaryView = () => {
                   >
                     {monthlyCardsData?.spendingStats?.percentChange && (
                       <>
-                        {monthlyCardsData?.spendingStats?.percentChange < 0 ? (
+                        {monthlyCardsData?.spendingStats?.percentChange > 0 ? (
                           <TrendingUp className="h-3 w-3" />
                         ) : (
                           <TrendingDown className="h-3 w-3" />
