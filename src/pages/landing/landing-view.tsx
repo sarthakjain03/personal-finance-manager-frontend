@@ -20,9 +20,9 @@ const features = [
     icon: <Target size={36} color="#2A8E9E" />,
   },
   {
-    title: "Comming Soon",
+    title: "Mobile App",
     description:
-      "An AI Financial Advisor to help you make better financial decisions.",
+      "Downloadable app for both Android and iOS might be developed based on demand.",
     icon: <Sparkles size={36} color="#2A8E9E" />,
   },
 ];
@@ -88,7 +88,8 @@ const LandingPage = () => {
                 className="text-base md:text-lg lg:text-xl text-bgSecondary max-w-4xl mb-6 mx-auto"
               >
                 Your Path to Lasting Wealth Starts Here. Track expenses, set
-                goals, and reduce stress — no sensitive data required.
+                goals, and reduce stress — no sensitive data required. Just a
+                little bit of discipline.
               </motion.p>
               <motion.div
                 variants={fadeInUp}
@@ -212,7 +213,7 @@ const LandingPage = () => {
             <div className="flex flex-col justify-center gap-6">
               <div className="flex flex-col justify-center gap-1">
                 <motion.p variants={fadeInUp} className="text-main text-xs">
-                  AI Feature
+                  Mobile App
                 </motion.p>
                 <motion.h2
                   initial={{ opacity: 0, y: 30 }}
@@ -221,14 +222,11 @@ const LandingPage = () => {
                   viewport={{ once: true }}
                   className="text-3xl lg:text-4xl font-semibold text-bgSecondary"
                 >
-                  AI Financial Advisor (Comming Soon)
+                  Downloadable App for both Android and iOS
                 </motion.h2>
               </div>
               <motion.p variants={fadeInUp} className="w-full text-sm">
-                An AI powered financial advisor that helps you make better
-                financial decisions whether it is a house, car, etc. Ask
-                questions with some input and it will give you advice on how to
-                save money, invest, and grow your wealth.
+                Might develop the mobile app for this platform based on demand
               </motion.p>
             </div>
           </section>
