@@ -29,3 +29,5 @@ const formatCurrency = (
 };
 
 export default formatCurrency;
+
+// TODO: Use capacitor to make it into a mobile app.
