@@ -1,6 +1,6 @@
 export interface Transaction {
   id: string;
-  date: string;
+  date: Date;
   description: string;
   category: string;
   transactionType: "Income" | "Expense";
@@ -24,7 +24,7 @@ export interface AddEditTransactionDialogProps {
     category: string;
     transactionType: "Income" | "Expense";
     amount: number;
-    date: string;
+    date: Date;
     txnId?: string;
     reqType: "new" | "edit";
   }) => Promise<boolean>;

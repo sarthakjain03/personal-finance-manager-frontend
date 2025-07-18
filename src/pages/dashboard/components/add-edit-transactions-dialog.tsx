@@ -101,13 +101,12 @@ const AddEditTransactionDialog = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setSubmitting(true);
-    console.log(new Date(), new Date().getTimezoneOffset());
     const success = await handleSave({
       description: values.description,
       category: values.category,
       transactionType: values.type,
       amount: parseFloat(values.amount),
-      date: values.date.toLocaleDateString("en-CA"),
+      date: new Date(values.date.toLocaleDateString("en-CA")),
       txnId: transaction?.id,
       reqType: action === "New" ? "new" : "edit",
     });
