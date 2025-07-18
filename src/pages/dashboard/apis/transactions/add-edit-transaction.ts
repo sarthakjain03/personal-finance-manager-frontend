@@ -20,7 +20,7 @@ const addOrEditTransaction = async ({
   description: string;
   category: string;
   amount: number;
-  date: Date;
+  date: string;
   transactionType: "" | "Income" | "Expense";
   reqType: "new" | "edit";
   txnId?: string;

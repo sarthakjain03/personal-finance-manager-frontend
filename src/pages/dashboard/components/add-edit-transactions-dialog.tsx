@@ -106,7 +106,7 @@ const AddEditTransactionDialog = ({
       category: values.category,
       transactionType: values.type,
       amount: parseFloat(values.amount),
-      date: values.date,
+      date: values.date.toISOString().split("T")[0],
       txnId: transaction?.id,
       reqType: action === "New" ? "new" : "edit",
     });

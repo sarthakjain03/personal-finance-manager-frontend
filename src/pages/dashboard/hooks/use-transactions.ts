@@ -83,7 +83,7 @@ const useTransactions = () => {
     category: string;
     transactionType: "" | "Income" | "Expense";
     amount: number;
-    date: Date;
+    date: string;
     txnId?: string;
     reqType: "new" | "edit";
   }) => {
