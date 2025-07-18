@@ -50,11 +50,11 @@ const createAppRouter = ({ user }: { user: User | null }) => {
     },
     {
       path: paths["terms-of-service"].path,
-      element: <TermsOfServicePageView />,
+      Component: TermsOfServicePageView,
     },
     {
       path: paths["privacy-policy"].path,
-      element: <PrivacyPolicyPageView />,
+      Component: PrivacyPolicyPageView,
     },
     {
       path: "*",
