@@ -280,13 +280,6 @@ const AddEditTransactionDialog = ({
                           onSelect={field.onChange}
                           className="p-3 pointer-events-auto"
                           disabled={submitting}
-                          fromDate={
-                            new Date(
-                              new Date().getFullYear() - 1,
-                              new Date().getMonth(),
-                              new Date().getDate()
-                            )
-                          }
                           toDate={new Date()}
                           captionLayout="dropdown"
                           numberOfMonths={1}
