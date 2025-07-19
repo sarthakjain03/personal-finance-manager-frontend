@@ -178,7 +178,7 @@ const GoalsView = () => {
         />
       )}
 
-      {deleteGoalOpen && selectedGoal && (
+      {selectedGoal && deleteGoalOpen ? (
         <DeleteConfirmDialog
           open={selectedGoal && deleteGoalOpen}
           onOpenChange={() => {
@@ -190,7 +190,7 @@ const GoalsView = () => {
           onConfirm={() => deleteGoalFromId(selectedGoal.id)}
           isLoading={isLoading}
         />
-      )}
+      ) : null}
     </div>
   );
 };
