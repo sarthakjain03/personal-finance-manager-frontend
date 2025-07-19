@@ -114,7 +114,7 @@ const BudgetsView = () => {
 
       {/* Budget Categories */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {budgets?.length === 0 && (
+        {budgets?.length === 0 && !isLoading && (
           <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl col-span-2 pt-14">
             No Budgets Set
           </div>

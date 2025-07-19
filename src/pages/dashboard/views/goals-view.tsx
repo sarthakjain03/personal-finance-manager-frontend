@@ -48,6 +48,8 @@ const GoalsView = () => {
     setSelectedGoal,
   } = useGoals();
 
+  console.log({ deleteGoalOpen, selectedGoal });
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -70,7 +72,7 @@ const GoalsView = () => {
 
       {/* Goals Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {goals?.length === 0 && (
+        {goals?.length === 0 && !isLoading && (
           <div className="flex flex-col items-center justify-center gap-6 text-gray-600/50 text-2xl col-span-2 pt-14">
             No Goals Added Yet
           </div>
@@ -78,7 +80,7 @@ const GoalsView = () => {
         {goals?.map((goal) => {
           const progress = (goal.currentAmount / goal.targetAmount) * 100;
           return (
-            <Card key={goal.id} className="hover:shadow-lg transition-shadow">
+            <Card key={goal?.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
