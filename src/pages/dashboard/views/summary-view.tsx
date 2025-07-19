@@ -198,11 +198,12 @@ const SummaryView = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="label" />
                   <YAxis />
-                  formatter=
-                  {(value) => [
-                    `${formatCurrency(Number(value), user)}`,
-                    "Amount",
-                  ]}
+                  <Tooltip
+                    formatter={(value) => [
+                      `${formatCurrency(Number(value), user)}`,
+                      "Amount",
+                    ]}
+                  />
                   <Area
                     type="monotone"
                     dataKey="value"
