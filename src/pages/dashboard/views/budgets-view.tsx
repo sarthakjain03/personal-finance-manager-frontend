@@ -34,6 +34,7 @@ const BudgetsView = () => {
     getStatusColor,
     isBudgetDialogOpen,
     setIsBudgetDialogOpen,
+    setSelectedBudget,
   } = useBudgets();
 
   return (
@@ -231,8 +232,11 @@ const BudgetsView = () => {
 
       {deleteBudgetOpen && selectedBudget && (
         <DeleteConfirmDialog
-          open={deleteBudgetOpen}
-          onOpenChange={setDeleteBudgetOpen}
+          open={selectedBudget && deleteBudgetOpen}
+          onOpenChange={() => {
+            setDeleteBudgetOpen(false);
+            setSelectedBudget(null);
+          }}
           title={"Budget"}
           description={selectedBudget?.category || ""}
           onConfirm={() => deleteBudgetFromId(selectedBudget.id)}

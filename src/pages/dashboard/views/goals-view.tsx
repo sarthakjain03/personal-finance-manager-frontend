@@ -45,6 +45,7 @@ const GoalsView = () => {
     createOrEditGoal,
     deleteGoalFromId,
     availableCategories,
+    setSelectedGoal,
   } = useGoals();
 
   return (
@@ -179,8 +180,11 @@ const GoalsView = () => {
 
       {deleteGoalOpen && selectedGoal && (
         <DeleteConfirmDialog
-          open={deleteGoalOpen}
-          onOpenChange={setDeleteGoalOpen}
+          open={selectedGoal && deleteGoalOpen}
+          onOpenChange={() => {
+            setDeleteGoalOpen(false);
+            setSelectedGoal(null);
+          }}
           title="Goal"
           description={selectedGoal?.title || ""}
           onConfirm={() => deleteGoalFromId(selectedGoal.id)}

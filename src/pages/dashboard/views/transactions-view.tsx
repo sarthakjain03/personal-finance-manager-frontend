@@ -39,6 +39,7 @@ const TransactionsView = () => {
     deleteTransactionOpen,
     isLoading,
     createOrEditTransaction,
+    setSelectedTransaction,
     hasMoreData,
     setPage,
     deleteTransactionFromId,
@@ -189,8 +190,11 @@ const TransactionsView = () => {
 
       {deleteTransactionOpen && selectedTransaction && (
         <DeleteConfirmDialog
-          open={deleteTransactionOpen}
-          onOpenChange={setDeleteTransactionOpen}
+          open={selectedTransaction && deleteTransactionOpen}
+          onOpenChange={() => {
+            setDeleteTransactionOpen(false);
+            setSelectedTransaction(null);
+          }}
           title={"Transaction"}
           description={selectedTransaction?.description || ""}
           onConfirm={() => deleteTransactionFromId(selectedTransaction?.id)}

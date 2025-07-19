@@ -164,6 +164,7 @@ const useGoals = () => {
     createOrEditGoal,
     deleteGoalFromId,
     availableCategories,
+    setSelectedGoal,
   };
 };
 

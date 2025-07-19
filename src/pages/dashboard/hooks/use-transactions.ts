@@ -224,6 +224,7 @@ const useTransactions = () => {
     createOrEditTransaction,
     isLoading,
     hasMoreData,
+    setSelectedTransaction,
     page,
     setPage,
     deleteTransactionFromId,
