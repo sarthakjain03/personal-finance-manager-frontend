@@ -329,6 +329,13 @@ const AddEditGoalDialog = ({
                           disabled={submitting}
                           captionLayout="dropdown"
                           numberOfMonths={1}
+                          fromDate={
+                            new Date(
+                              new Date().getFullYear(),
+                              new Date().getMonth(),
+                              new Date().getDate() + 1
+                            )
+                          }
                         />
                       </PopoverContent>
                     </Popover>
