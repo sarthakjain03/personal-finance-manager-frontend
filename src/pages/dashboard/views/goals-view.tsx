@@ -48,7 +48,8 @@ const GoalsView = () => {
     setSelectedGoal,
   } = useGoals();
 
-  console.log({ deleteGoalOpen, selectedGoal });
+  console.log(document.querySelectorAll('[data-state="open"]'));
+  console.log(document.querySelectorAll("[data-radix-portal]"));
 
   return (
     <div className="space-y-6">
@@ -182,8 +183,9 @@ const GoalsView = () => {
 
       {selectedGoal && deleteGoalOpen ? (
         <DeleteConfirmDialog
+          key={selectedGoal?.id}
           open={selectedGoal && deleteGoalOpen}
-          onOpenChange={() => {
+          onOpenChange={async () => {
             setDeleteGoalOpen(false);
             setSelectedGoal(null);
           }}
