@@ -71,6 +71,10 @@ const Navbar = ({ isLandingView = false }) => {
             </PopoverTrigger>
             <PopoverContent>
               <div className="flex flex-col gap-3">
+                <div className="flex flex-col">
+                  <p className="font-medium">{user?.name}</p>
+                  <p className="font-medium text-gray-500/50">{user?.email}</p>
+                </div>
                 <p
                   className="text-main text-sm font-medium cursor-pointer"
                   onClick={() => navigate("/dashboard")}

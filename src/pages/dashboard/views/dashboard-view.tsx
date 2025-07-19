@@ -1,4 +1,4 @@
-import { useState, lazy, JSX, Suspense, useMemo } from "react";
+import { lazy, Suspense, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "@/app/layout/navbar";
 import Footer from "@/app/layout/footer";
@@ -6,6 +6,7 @@ import Navigation from "../components/navigation";
 import CurrentBalanceCard from "../components/current-balance";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
+import useUserStore from "@/store/user-store";
 
 const SummaryLazyView = lazy(() => import("./summary-view"));
 const TransactionsLazyView = lazy(() => import("./transactions-view"));
@@ -90,6 +91,7 @@ const SkeletonLoading = (activeTab: string) => {
 };
 
 const DashboardView = () => {
+  const { user } = useUserStore();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tabId = queryParams.get("tab") ?? "summary";
@@ -106,6 +108,9 @@ const DashboardView = () => {
       <Navbar />
       <div className="grow">
         <div className="mt-24 px-8 md:px-12 flex flex-col gap-6 min-h-screen">
+          <p className="m-0 text-xl font-medium text-gray-600/55">
+            Hi {user?.name}, welcome to your dashboard!
+          </p>
           <CurrentBalanceCard />
           <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
           <Suspense fallback={SkeletonLoading(activeTab)}>
