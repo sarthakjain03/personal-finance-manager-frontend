@@ -48,6 +48,8 @@ const GoalsView = () => {
     setSelectedGoal,
   } = useGoals();
 
+  console.log(document.body.style.pointerEvents);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -184,9 +186,9 @@ const GoalsView = () => {
           onOpenChange={() => {
             setDeleteGoalOpen(false);
             setSelectedGoal(null);
-            setTimeout(() => {
-              document.body.style.pointerEvents = "auto";
-            }, 500);
+            // setTimeout(() => {
+            //   document.body.style.pointerEvents = "auto";
+            // }, 500);
           }}
           title="Goal"
           description={selectedGoal?.title || ""}
