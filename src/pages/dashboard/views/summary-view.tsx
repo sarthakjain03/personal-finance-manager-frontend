@@ -198,7 +198,11 @@ const SummaryView = () => {
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="label" />
                   <YAxis />
-                  <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
+                  formatter=
+                  {(value) => [
+                    `${formatCurrency(Number(value), user)}`,
+                    "Amount",
+                  ]}
                   <Area
                     type="monotone"
                     dataKey="value"
@@ -268,7 +272,12 @@ const SummaryView = () => {
                       />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
+                  <Tooltip
+                    formatter={(value) => [
+                      `${formatCurrency(Number(value), user)}`,
+                      "Amount",
+                    ]}
+                  />
                 </PieChart>
               </ResponsiveContainer>
             )}
@@ -297,8 +306,8 @@ const SummaryView = () => {
                 <XAxis dataKey="category" />
                 <YAxis />
                 <Tooltip />
-                <Bar dataKey="budgetAmount" fill="darkgreen" name="Budget" />
-                <Bar dataKey="spentAmount" fill="darkred" name="Spent" />
+                <Bar dataKey="budgetAmount" fill="green" name="Budget" />
+                <Bar dataKey="spentAmount" fill="red" name="Spent" />
               </BarChart>
             </ResponsiveContainer>
           )}
