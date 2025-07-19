@@ -269,7 +269,9 @@ const SummaryView = () => {
                     {categoryPieChartData.map((entry, index) => (
                       <Cell
                         key={`cell-${index}`}
-                        fill={pieChartColors[pieChartColors.length % index]}
+                        fill={
+                          pieChartColors[pieChartColors.length % (index + 1)]
+                        }
                       />
                     ))}
                   </Pie>
