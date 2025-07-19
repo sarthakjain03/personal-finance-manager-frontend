@@ -1,6 +1,5 @@
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -8,6 +7,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 
 interface DeleteDialogProps {
@@ -46,7 +46,7 @@ const DeleteConfirmDialog = ({
           <AlertDialogCancel className="cursor-pointer" disabled={isLoading}>
             Cancel
           </AlertDialogCancel>
-          <AlertDialogAction
+          <Button
             onClick={handleConfirm}
             className="bg-red-600 hover:bg-red-700 cursor-pointer"
             disabled={isLoading}
@@ -59,7 +59,7 @@ const DeleteConfirmDialog = ({
             ) : (
               "Delete"
             )}
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
