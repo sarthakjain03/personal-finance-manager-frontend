@@ -112,7 +112,11 @@ const AddEditGoalDialog = ({
       category: "",
       targetAmount: "",
       currentAmount: "0",
-      deadline: new Date(),
+      deadline: new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate() + 1
+      ),
     },
   });
 
