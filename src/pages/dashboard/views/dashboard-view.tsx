@@ -108,8 +108,8 @@ const DashboardView = () => {
       <Navbar />
       <div className="grow">
         <div className="mt-24 px-8 md:px-12 flex flex-col gap-6 min-h-screen">
-          <p className="m-0 text-xl font-medium text-gray-600/55">
-            Hi {user?.name}, welcome to your dashboard!
+          <p className="m-0 text-xl text-gray-600/55">
+            Hi {user?.name?.split(" ")?.[0]}, welcome to your dashboard!
           </p>
           <CurrentBalanceCard />
           <Navigation activeTab={activeTab} onTabChange={handleTabChange} />
