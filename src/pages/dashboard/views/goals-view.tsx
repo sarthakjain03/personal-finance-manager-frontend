@@ -48,8 +48,6 @@ const GoalsView = () => {
     setSelectedGoal,
   } = useGoals();
 
-  console.log(document.body.style.pointerEvents);
-
   return (
     <div className="space-y-6">
       {/* Header */}
