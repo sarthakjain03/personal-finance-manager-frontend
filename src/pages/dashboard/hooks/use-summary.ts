@@ -90,7 +90,12 @@ const useSummary = () => {
         timeline: spendTrendChartTimeline,
       });
       if (response?.success && response?.data) {
-        setSpendTrendChartData(response?.data);
+        const sortedData = response?.data?.sort((a, b) => {
+          const dateA = new Date(a.label);
+          const dateB = new Date(b.label);
+          return dateA.getTime() - dateB.getTime();
+        });
+        setSpendTrendChartData(sortedData);
       } else {
         toast.error(response?.message);
       }
