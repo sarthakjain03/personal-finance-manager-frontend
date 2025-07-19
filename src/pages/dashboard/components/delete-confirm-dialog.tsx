@@ -6,6 +6,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  AlertDialogOverlay,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -34,6 +35,7 @@ const DeleteConfirmDialog = ({
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
+      <AlertDialogOverlay className="bg-red-500/50" />
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Delete {title}?</AlertDialogTitle>
