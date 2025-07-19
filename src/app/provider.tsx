@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { googleClientId } from "@/lib/env";
 import { Loader2 } from "lucide-react";
+import { Analytics } from "@vercel/analytics/react";
 
 const AppProvider = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -17,7 +18,10 @@ const AppProvider = ({ children }: { children: React.ReactNode }) => {
     >
       <ErrorBoundary FallbackComponent={() => <div>Error</div>}>
         <GoogleOAuthProvider clientId={googleClientId}>
-          <TooltipProvider>{children}</TooltipProvider>
+          <TooltipProvider>
+            {children}
+            <Analytics />
+          </TooltipProvider>
         </GoogleOAuthProvider>
         <Toaster />
       </ErrorBoundary>
