@@ -186,9 +186,6 @@ const GoalsView = () => {
           onOpenChange={() => {
             setDeleteGoalOpen(false);
             setSelectedGoal(null);
-            // setTimeout(() => {
-            //   document.body.style.pointerEvents = "auto";
-            // }, 500);
           }}
           title="Goal"
           description={selectedGoal?.title || ""}

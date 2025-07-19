@@ -118,6 +118,10 @@ const useGoals = () => {
       console.error(error);
       toast.error("Something went wrong while deleting goal");
     }
+    setTimeout(() => {
+      document.body.style.pointerEvents = "";
+      document.documentElement.style.pointerEvents = "";
+    }, 500);
     setIsLoading(false);
   };
 
